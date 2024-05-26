@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
-
+#include<QScreen>
 ////
 ////
 int main(int argc, char *argv[])
@@ -23,6 +23,13 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
+    w.resize(1600, 900);
+    QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
+    int x = (screenGeometry.width() - w.width()) / 2;
+    int y = (screenGeometry.height() - w.height()) / 2;
+    w.move(x,y-20);
+
+
     w.show();
     return a.exec();
 }
