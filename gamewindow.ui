@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GameWindow</class>
+ <widget class="QWidget" name="GameWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>687</width>
+    <height>459</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="run">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>200</y>
+     <width>80</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Run</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="upload">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>200</y>
+     <width>80</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>upload</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="IDE">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>230</y>
+     <width>221</width>
+     <height>171</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="view">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>230</y>
+     <width>211</width>
+     <height>171</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>210</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Test input</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="textBrowser">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>30</y>
+     <width>231</width>
+     <height>121</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>210</y>
+     <width>40</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Output</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

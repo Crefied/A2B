@@ -14,34 +14,17 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextBrowser" name="textBrowser">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>-10</y>
-      <width>191</width>
-      <height>141</height>
+      <x>240</x>
+      <y>170</y>
+      <width>80</width>
+      <height>18</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QTextEdit" name="textEdit">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>130</y>
-      <width>131</width>
-      <height>81</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QColumnView" name="columnView">
-    <property name="geometry">
-     <rect>
-      <x>230</x>
-      <y>30</y>
-      <width>256</width>
-      <height>192</height>
-     </rect>
+    <property name="text">
+     <string>stage</string>
     </property>
    </widget>
   </widget>
