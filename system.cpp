@@ -141,11 +141,11 @@ void Code::process(QTextDocument * _doc)
 
     }
 }
-QString Code::execute(QString testcase,bool isAnswer)
+QString Code::execute(QString testcase,bool isAnswerCode)
 {
     bool isEnd = false;
     int looptime = 0;
-    if(!isAnswer)
+    if(!isAnswerCode) // 测试代码输出初始例子
         System::logWidget->append(testcase);
     while(!isEnd)
     {
@@ -161,14 +161,14 @@ QString Code::execute(QString testcase,bool isAnswer)
                 isEnd = true;
                 break;
             }
-            int result = (command + i)->work(isAnswer,&testcase);
+            int result = (command + i)->work(isAnswerCode,&testcase); // 执行代码
             if(result == 1) // 没找到
             {
                 continue;
             }
             else if(result == 0) // 成功找到
             {
-                if(!isAnswer)
+                if(!isAnswerCode) // 输出当前修改情况
                     System::logWidget->append(testcase);
                 break;
             }
@@ -307,9 +307,9 @@ void Command::setCommandType(CommandType _c)
     isUsed = false;
 }
 
-int Command::work(bool isAnswer,QString * _case)
+int Command::work(bool isAnswerCode,QString * _case)
 {
-    if(!isAnswer)
+    if(!isAnswerCode)
         System::logWidget->append("    " + stringCode);
     if(!isUsed) // 如果是可以被使用的
     {

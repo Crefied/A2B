@@ -9,6 +9,12 @@
 #include <QTextBrowser>
 class Command;
 class System;
+/*
+ * 重点关注：
+ * System类 中run：计算调用起点
+ * Stage类 ： 关卡所需
+*/
+
 const int MAXTIME = 800;
 enum Error {
     WA = 1,
@@ -25,20 +31,21 @@ struct CommandType // 关键字种类，判断指令的操作
     bool isStartPut; // 右侧的start
     bool isEndFind; // 左侧的end
     bool isEndPut; // 右侧的end
-    bool isReturn;
+    bool isReturn; // 右侧return
 };
 struct Code // 代码块
 {
 private:
-    Command * command; // 转化为可执行的代码
+    Command * command; // 可执行的代码，一个command是一行代码
     int commandLen; // 代码行数量
 public:
     Code();
     void process(QTextDocument * _doc);// 转化输入为代码
-    QString execute(QString testcase,bool isAnswer = false);// 执行代码
+    QString execute(QString testcase,bool isAnswerCode = false);// 执行代码
 };
 
-struct Stage{
+struct Stage // 关卡类
+{
     QTextDocument * description; // 代码描述
     QTextDocument * answer; // 原始代码
     int caseMinLen = 1; // 最小例子长度
@@ -49,16 +56,16 @@ struct Stage{
 class System // 字符处理类
 {
 private:
-    static bool error;
+    static bool error; // 错误全局传递
 public:
-    static QTextBrowser * logWidget;
+    static QTextBrowser * logWidget; // 外部输出文本框，即log文本框
     System(){};
     QString generateCase(Stage *_stage); // 生成测试样例
     void judge(Stage * _stage,Code * _input ,Code * _answer); // 判断结果对不对
     void run(Stage * _stage,QTextDocument * _input,bool _debug); // 进行整体的代码核验流程
     static void processError(Error _error,int line,QString * inputString = NULL,QString * answerString = NULL); // 处理error
-    void caseAC();
-    void allCaseAC();
+    void caseAC(); // 一个样例AC
+    void allCaseAC(); // 所有样例AC，没写
 };
 
 
@@ -72,10 +79,10 @@ private:
     QString stringCode; // 原始的string形式的code
 public:
     Command();
-    void setCommandType(CommandType _c);
+    void setCommandType(CommandType _c); // 4个set
     void setStringCode(QString _s);
     void setFindString(QString _s);
     void setPutString(QString _s);
-    int work(bool isAnswer,QString * _case); // 进行一行运算
+    int work(bool isAnswerCode,QString * _case); // 进行一行运算
 };
 
