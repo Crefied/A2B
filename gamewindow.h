@@ -1,4 +1,4 @@
-#ifndef GAMEWINDOW_H
+ï»¿#ifndef GAMEWINDOW_H
 #define GAMEWINDOW_H
 
 #include <QWidget>
@@ -18,7 +18,7 @@ public:
     Ui::GameWindow* ui;
     Stage* stage;
 
-    void setStageInfo();//ÒÑ¾­¸üĞÂstageĞÅÏ¢²Åµ÷ÓÃ
+    void setStageInfo();//å·²ç»æ›´æ–°stageä¿¡æ¯æ‰è°ƒç”¨
 private slots:
     void on_run_clicked();
 

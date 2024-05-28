@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+ï»¿#include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include"./ui_gamewindow.h"
 #include<QFile>
@@ -18,8 +18,8 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
     //QTabWidget* stageWidget = dynamic_cast<QTabWidget*>(ui->stackedWidget->widget(1));
 
     gamewindow = _gamewindow;
-    stageAble[1][1] = true; //µÚÒ»¹Ø¿ÉÓÃ
-    //½¨ÒéÔÚÕâÀï³õÊ¼»¯ËùÓĞstagesĞÅÏ¢
+    stageAble[1][1] = true; //ç¬¬ä¸€å…³å¯ç”¨
+    //å»ºè®®åœ¨è¿™é‡Œåˆå§‹åŒ–æ‰€æœ‰stagesä¿¡æ¯
     stages[1][1] = new Stage("As beginning\n", "You need to replace a string`s all a with b\n", "Input example:abac\nOutput example:bbbc\n");
 
     QFile file(styleSheetPath);
@@ -32,11 +32,11 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
     {
         qDebug() << "Failed to open style.qss" << file.errorString() << QDir::currentPath();
     }
-	//Í³Ò»´°¿ÚÑùÊ½£¬Í¨¹ıQSSÎÄ¼şÉèÖÃ
+	//ç»Ÿä¸€çª—å£æ ·å¼ï¼Œé€šè¿‡QSSæ–‡ä»¶è®¾ç½®
 
 
     this->setStyleSheet(styleSheet);
-	//gamewindow->setStyleSheet(styleSheet);
+	//gamewindow->setStyleSheet(styleSheet); //ä¸­æ–‡
     
     
 
@@ -45,7 +45,7 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
 	stackedWidget->setCurrentIndex(0);
 	ui->stackedWidget->layout()->setAlignment(Qt::AlignRight);
 	this->setGeometry(0, 0, 800, 600);
-    //ui->stackedWidget->addWidget(gamewindow); »áµ¼ÖÂ¹Ø±Õ³ÌĞòÊ±¶ÁĞ´´íÎó£¬Ó¦¸ÃÊÇdeleteÖ¸ÕëµÄÎÊÌâ£¬²ÉÓÃhide showµÄ·½·¨Ìæ´ú
+    //ui->stackedWidget->addWidget(gamewindow); ä¼šå¯¼è‡´å…³é—­ç¨‹åºæ—¶è¯»å†™é”™è¯¯ï¼Œåº”è¯¥æ˜¯deleteæŒ‡é’ˆçš„é—®é¢˜ï¼Œé‡‡ç”¨hide showçš„æ–¹æ³•æ›¿ä»£
 
 	connect(gamewindow->ui->backButton, &QPushButton::clicked, this, [=]()
 		{
@@ -79,7 +79,7 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
             
             connect(button, &QPushButton::clicked, this, [=]() 
                 {
-					gamewindow->stage = stages[i + 1][buttonIndex];//begin:i+1=1,buttonIndex=1,µÚÒ»ÕÂµÚÒ»¹Ø
+					gamewindow->stage = stages[i + 1][buttonIndex];//begin:i+1=1,buttonIndex=1,ç¬¬ä¸€ç« ç¬¬ä¸€å…³
 					gamewindow->setStageInfo();
 					this->gamewindow->show();
                     this->hide();
