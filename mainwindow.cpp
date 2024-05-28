@@ -4,7 +4,7 @@
 #include<QFile>
 #include<QDebug>
 #include<QDir>
-
+#pragma execution_character_set("utf-8")
 
 MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
     : QMainWindow(parent)
@@ -18,6 +18,9 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
     //QTabWidget* stageWidget = dynamic_cast<QTabWidget*>(ui->stackedWidget->widget(1));
 
     gamewindow = _gamewindow;
+    stageAble[1][1] = true; //第一关可用
+    //建议在这里初始化所有stages信息
+    stages[1][1] = new Stage("As beginning\n", "You need to replace a string`s all a with b\n", "Input example:abac\nOutput example:bbbc\n");
 
     QFile file(styleSheetPath);
     if (file.open(QFile::ReadOnly))
@@ -33,8 +36,8 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
 
 
     this->setStyleSheet(styleSheet);
-	gamewindow->setStyleSheet(styleSheet);
-
+	//gamewindow->setStyleSheet(styleSheet);
+    
     
 
 	this->setWindowTitle("A2B");
@@ -42,7 +45,7 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
 	stackedWidget->setCurrentIndex(0);
 	ui->stackedWidget->layout()->setAlignment(Qt::AlignRight);
 	this->setGeometry(0, 0, 800, 600);
-    //ui->stackedWidget->addWidget(gamewindow);
+    //ui->stackedWidget->addWidget(gamewindow); 会导致关闭程序时读写错误，应该是delete指针的问题，采用hide show的方法替代
 
 	connect(gamewindow->ui->backButton, &QPushButton::clicked, this, [=]()
 		{
@@ -69,12 +72,17 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
     {
         QWidget* tab = tabWidget->widget(i);
         QList<QPushButton*> buttons = tab->findChildren<QPushButton*>();
+        int buttonIndex = 0;
         for (QPushButton* button : buttons)
         {
-            connect(button, &QPushButton::clicked, this, [=]()
+            buttonIndex++;
+            
+            connect(button, &QPushButton::clicked, this, [=]() 
                 {
-                    this->hide();
+					gamewindow->stage = stages[i + 1][buttonIndex];//begin:i+1=1,buttonIndex=1,第一章第一关
+					gamewindow->setStageInfo();
 					this->gamewindow->show();
+                    this->hide();
                 });
         }
     }

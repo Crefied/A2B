@@ -24,3 +24,10 @@ void GameWindow::on_run_clicked()
     system->run(stage,ui->IDE->document(),false);
 }
 
+void GameWindow::setStageInfo()
+{
+	ui->stageInfo->append(stage->name);
+	ui->stageInfo->append(stage->scriptDescription);
+	ui->stageInfo->append(stage->caseDescription);
+}
+

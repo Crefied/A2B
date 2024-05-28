@@ -53,8 +53,9 @@ struct Stage // 关卡类
 
 	QString name; // 关卡名
 	QString scriptDescription;// 关卡描述
-
+	QString caseDescription; // 例子描述
     Stage(){};
+	Stage(QString _name, QString _scriptDescription, QString _caseDescription);
 };
 
 class System // 字符处理类

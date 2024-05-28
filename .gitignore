@@ -79,3 +79,4 @@ out/
 #
 CMakePresets.json
 CMakeUserPresets.json
+CMakeLists.txt.user

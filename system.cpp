@@ -370,3 +370,10 @@ int Command::work(bool isAnswerCode,QString * _case)
     }
     return 0;
 }
+
+Stage::Stage(QString _name, QString _scriptDescription, QString _caseDescription)
+{
+	name = _name;
+	scriptDescription = _scriptDescription;
+	caseDescription = _caseDescription;
+}

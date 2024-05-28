@@ -23,6 +23,8 @@ public:
     QWidget* centralWidget;
 	QStackedWidget* stackedWidget;
     QString styleSheet;
+    Stage* stages[10][10] = {nullptr};
+    bool stageAble[10][10] = { false };
     //MainWindow(QWidget *parent = nullptr);
     MainWindow(GameWindow * _gamewindow,QWidget *parent = nullptr);
     ~MainWindow();
