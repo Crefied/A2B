@@ -1,20 +1,25 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include"./ui_gamewindow.h"
 #include<QFile>
 #include<QDebug>
 #include<QDir>
+
 
 MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     QFileInfo fileInfo(__FILE__);
     QDir sourceDir = fileInfo.dir();
     QString styleSheetPath = sourceDir.filePath("style.qss");
+    //QTabWidget* stageWidget = dynamic_cast<QTabWidget*>(ui->stackedWidget->widget(1));
+
+    gamewindow = _gamewindow;
 
     QFile file(styleSheetPath);
-    QString styleSheet;
     if (file.open(QFile::ReadOnly))
     {
         styleSheet = QLatin1String(file.readAll());
@@ -28,6 +33,8 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
 
 
     this->setStyleSheet(styleSheet);
+	gamewindow->setStyleSheet(styleSheet);
+
     
 
 	this->setWindowTitle("A2B");
@@ -35,18 +42,54 @@ MainWindow::MainWindow(GameWindow * _gamewindow,QWidget *parent)
 	stackedWidget->setCurrentIndex(0);
 	ui->stackedWidget->layout()->setAlignment(Qt::AlignRight);
 	this->setGeometry(0, 0, 800, 600);
-    connect(ui->startPushButton, &QPushButton::clicked, this, [=](){
-        ui->stackedWidget->setCurrentIndex(1);
-        
-        });
+    //ui->stackedWidget->addWidget(gamewindow);
 
+	connect(gamewindow->ui->backButton, &QPushButton::clicked, this, [=]()
+		{
+            gamewindow->hide();
+            this->show();
+			ui->stackedWidget->setCurrentIndex(0);
+		});
+
+    connect(ui->startPushButton, &QPushButton::clicked, this, [=](){
+        ui->stackedWidget->setCurrentIndex(1);        
+        });
+	
+	connect(ui->backPushButton, &QPushButton::clicked, this, [=]()
+		{
+			ui->stackedWidget->setCurrentIndex(0);
+		});
+	connect(ui->optionPushButton, &QPushButton::clicked, this, [=]()
+		{
+			ui->stackedWidget->setCurrentIndex(2);
+		});
+
+    QTabWidget* tabWidget = ui->tabWidget; 
+    for (int i = 0; i < tabWidget->count(); ++i)
+    {
+        QWidget* tab = tabWidget->widget(i);
+        QList<QPushButton*> buttons = tab->findChildren<QPushButton*>();
+        for (QPushButton* button : buttons)
+        {
+            connect(button, &QPushButton::clicked, this, [=]()
+                {
+                    this->hide();
+					this->gamewindow->show();
+                });
+        }
+    }
+
+
+    
+    
 }
-    gamewindow = _gamewindow;
-}
+
+
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+	ui->stackedWidget->removeWidget(gamewindow);
+    //delete ui;
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -54,4 +97,5 @@ void MainWindow::on_pushButton_clicked()
     this->hide();
     this->gamewindow->show();
 }
+
 

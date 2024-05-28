@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     System system;
     GameWindow gamewindow = GameWindow();
     MainWindow w(&gamewindow);
-    gamewindow.show();
+    //gamewindow.show();
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    MainWindow w;
     w.resize(1600, 900);
+	gamewindow.resize(1600, 900);
     QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
     int x = (screenGeometry.width() - w.width()) / 2;
     int y = (screenGeometry.height() - w.height()) / 2;

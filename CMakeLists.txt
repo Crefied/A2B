@@ -16,8 +16,6 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
-        Stage.h
-        Stage.cpp
         mainwindow.ui
         style.qss
         ${TS_FILES}

@@ -12,9 +12,9 @@ GameWindow::GameWindow(QWidget *parent)
 
 GameWindow::~GameWindow()
 {
-    delete ui;
-    delete system;
-    delete stage;
+    //delete ui;
+    //delete system;
+    //delete stage;
 }
 
 void GameWindow::on_run_clicked()

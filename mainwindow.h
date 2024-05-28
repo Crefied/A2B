@@ -1,11 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "Stage.h"
+
 #include <QMainWindow>
 #include "gamewindow.h"
 #include<QStackedLayout>
 #include<qstackedwidget.h>
+#include<QPointer>
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -21,7 +22,8 @@ class MainWindow : public QMainWindow
 public:
     QWidget* centralWidget;
 	QStackedWidget* stackedWidget;
-    MainWindow(QWidget *parent = nullptr);
+    QString styleSheet;
+    //MainWindow(QWidget *parent = nullptr);
     MainWindow(GameWindow * _gamewindow,QWidget *parent = nullptr);
     ~MainWindow();
 
@@ -30,6 +32,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    GameWindow * gamewindow;
+	QPointer<GameWindow> gamewindow;
 };
 #endif // MAINWINDOW_H

@@ -50,6 +50,10 @@ struct Stage // 关卡类
     QTextDocument * answer; // 原始代码
     int caseMinLen = 1; // 最小例子长度
     int caseMaxLen = 7; // 最大例子长度
+
+	QString name; // 关卡名
+	QString scriptDescription;// 关卡描述
+
     Stage(){};
 };
 
