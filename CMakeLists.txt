@@ -16,8 +16,13 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
+        Stage.h
+        Stage.cpp
         mainwindow.ui
+        style.qss
+        ${TS_FILES}
 )
+
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(untitled3
@@ -73,3 +78,5 @@ install(TARGETS untitled3
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(untitled3)
 endif()
+
+
