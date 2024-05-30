@@ -28,13 +28,13 @@ void GameWindow::on_run_clicked()
 
 
 //void GameWindow::on_backButton_clicked()
-=======
-}
+
+
 
 void GameWindow::setStageInfo()
 {
-	ui->stageInfo->append(stage->name);
-	ui->stageInfo->append(stage->scriptDescription);
-	ui->stageInfo->append(stage->caseDescription);
+	ui->Puzzle->appendPlainText(stage->name);
+	ui->Puzzle->appendPlainText(stage->scriptDescription);
+	ui->Puzzle->appendPlainText(stage->caseDescription);
 }
 
