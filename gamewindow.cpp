@@ -22,6 +22,13 @@ void GameWindow::on_run_clicked()
     stage->answer = ui->view->document();
     System::logWidget = ui->textBrowser;
     system->run(stage,ui->IDE->document(),false);
+
+    ui->Progress->resize(611,31);
+}
+
+
+//void GameWindow::on_backButton_clicked()
+=======
 }
 
 void GameWindow::setStageInfo()

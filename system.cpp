@@ -213,10 +213,15 @@ QString System::generateCase(Stage *_stage)
         {
         case 0:
             s.append('a');
+
+            break;
         case 1:
             s.append('b');
+            break;
         case 2:
             s.append('c');
+            break;
+
         }
     }
     return s;

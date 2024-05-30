@@ -1,7 +1,9 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#endif // SYSTEM_H
+
+
+
 #include <QString>
 #include <QTextDocument>
 #include <QTextBlock>
@@ -53,9 +55,11 @@ struct Stage // 关卡类
 
 	QString name; // 关卡名
 	QString scriptDescription;// 关卡描述
+
 	QString caseDescription; // 例子描述
     Stage(){};
 	Stage(QString _name, QString _scriptDescription, QString _caseDescription);
+
 };
 
 class System // 字符处理类
@@ -90,4 +94,7 @@ public:
     void setPutString(QString _s);
     int work(bool isAnswerCode,QString * _case); // 进行一行运算
 };
+
+#endif // SYSTEM_H
+
 

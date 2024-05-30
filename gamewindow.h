@@ -16,11 +16,14 @@ public:
     GameWindow(QWidget *parent = nullptr);
     ~GameWindow();
     Ui::GameWindow* ui;
+
     Stage* stage;
 
-    void setStageInfo();//已经更新stage信息才调用
+    void setStageInfo();//脪脩戮颅赂眉脨脗stage脨脜脧垄虏脜碌梅脫脙
 private slots:
     void on_run_clicked();
+    
+    //void on_backButton_clicked();
 
 private:
 
