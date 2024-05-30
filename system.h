@@ -9,6 +9,9 @@
 #include <QTextBlock>
 #include <QRandomGenerator64>
 #include <QTextBrowser>
+#include<QFile>
+#include<QFileInfo>
+#include<QDir>
 class Command;
 class System;
 /*
@@ -55,11 +58,12 @@ struct Stage // 关卡类
 
 	QString name; // 关卡名
 	QString scriptDescription;// 关卡描述
-
 	QString caseDescription; // 例子描述
+    QString answerString;
     Stage(){};
-	Stage(QString _name, QString _scriptDescription, QString _caseDescription);
-
+	Stage(QString _name, QString _scriptDescription, QString _caseDescription,QString answer);
+    void saveStage();
+    void loadStage(QString path); // path:QString("Stage/") + n + ".txt" !!! n需要name去掉 QChar('\n')
 };
 
 class System // 字符处理类

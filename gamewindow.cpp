@@ -6,15 +6,21 @@ GameWindow::GameWindow(QWidget *parent)
     , ui(new Ui::GameWindow)
 {
     ui->setupUi(this);
+	this->setWindowTitle("A2B");
     system = new System();
     stage = new Stage();
+
+    connect(ui->upload, &QPushButton::clicked, [&]()
+        {
+            stage->saveStage();
+        });
 }
 
 GameWindow::~GameWindow()
 {
-    //delete ui;
-    //delete system;
-    //delete stage;
+    delete ui;
+    delete system;
+    delete stage;
 }
 
 void GameWindow::on_run_clicked()

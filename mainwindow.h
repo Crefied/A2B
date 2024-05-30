@@ -4,6 +4,7 @@
 
 #include <QMainWindow>
 #include "gamewindow.h"
+#include"gamewindow_designed.h"
 #include<QStackedLayout>
 #include<qstackedwidget.h>
 #include<QPointer>
@@ -28,7 +29,7 @@ public:
     bool stageAble[10][10] = { false };
 
     //MainWindow(QWidget *parent = nullptr);
-    MainWindow(GameWindow * _gamewindow,QWidget *parent = nullptr);
+    MainWindow(GameWindow * _gamewindow,QPointer<gamewindow_designed> _designedWindow,QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -37,5 +38,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
 	QPointer<GameWindow> gamewindow;
+	QPointer<gamewindow_designed> designedWindow;
 };
 #endif // MAINWINDOW_H

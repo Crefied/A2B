@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>893</height>
+    <width>963</width>
+    <height>932</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -41,14 +41,14 @@
       <x>10</x>
       <y>20</y>
       <width>1241</width>
-      <height>831</height>
+      <height>801</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_8">
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="startMenu">
         <widget class="QWidget" name="verticalLayoutWidget">
@@ -126,7 +126,7 @@
              <bool>false</bool>
             </property>
             <property name="flat">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -142,10 +142,8 @@
           <rect>
            <x>10</x>
            <y>0</y>
-
            <width>1600</width>
            <height>900</height>
-
           </rect>
          </property>
          <property name="font">
@@ -169,15 +167,18 @@
             <rect>
              <x>100</x>
              <y>100</y>
-             <width>160</width>
-             <height>281</height>
+             <width>391</width>
+             <height>491</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
              <widget class="QPushButton" name="Stage1_1">
               <property name="text">
-               <string>Stage1</string>
+               <string>Stage1-1 Beginnig</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -201,7 +202,51 @@
          </widget>
         </widget>
        </widget>
-       <widget class="QWidget" name="gameWidget"/>
+       <widget class="QWidget" name="modeWidget">
+        <widget class="QWidget" name="verticalLayoutWidget_4">
+         <property name="geometry">
+          <rect>
+           <x>119</x>
+           <y>80</y>
+           <width>411</width>
+           <height>611</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="text">
+             <string>剧情模式</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>自定义关卡</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>123</x>
+           <y>26</y>
+           <width>161</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:white
+</string>
+         </property>
+         <property name="text">
+          <string>请选择模式</string>
+         </property>
+        </widget>
+       </widget>
        <widget class="QWidget" name="optionWidget"/>
       </widget>
      </item>
@@ -210,10 +255,10 @@
    <widget class="QPushButton" name="backPushButton">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>790</y>
-      <width>311</width>
-      <height>91</height>
+      <x>20</x>
+      <y>830</y>
+      <width>261</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="cursor">
@@ -229,7 +274,7 @@
      <bool>false</bool>
     </property>
     <property name="flat">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
@@ -238,10 +283,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1024</width>
-
+     <width>963</width>
      <height>22</height>
-
     </rect>
    </property>
   </widget>

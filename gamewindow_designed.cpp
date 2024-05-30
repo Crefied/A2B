@@ -6,6 +6,7 @@ gamewindow_designed::gamewindow_designed(QWidget *parent)
     , ui(new Ui::gamewindow_designed)
 {
     ui->setupUi(this);
+	this->setWindowTitle("A2B");
     system = new System();
     stage = new Stage();
 }

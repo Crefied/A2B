@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 #include "gamewindow.h"
-
+#include"gamewindow_designed.h"
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include<QPointer>
 #include<QScreen>
 ////
 ////
@@ -12,7 +13,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     System system;
     GameWindow gamewindow = GameWindow();
-    MainWindow w(&gamewindow);
+	QPointer<gamewindow_designed> design = new gamewindow_designed();
+    MainWindow w(&gamewindow,design);
     //gamewindow.show();
 
     QTranslator translator;

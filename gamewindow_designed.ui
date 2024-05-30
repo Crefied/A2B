@@ -107,7 +107,7 @@ font: 700 20pt &quot;Consolas&quot;;
 color:rgb(0,255,0);</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="backButton">
    <property name="geometry">
     <rect>
      <x>30</x>

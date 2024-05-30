@@ -376,9 +376,52 @@ int Command::work(bool isAnswerCode,QString * _case)
     return 0;
 }
 
-Stage::Stage(QString _name, QString _scriptDescription, QString _caseDescription)
+Stage::Stage(QString _name, QString _scriptDescription, QString _caseDescription,QString _answer)
 {
 	name = _name;
 	scriptDescription = _scriptDescription;
 	caseDescription = _caseDescription;
+    answer = new QTextDocument();
+	answer->setPlainText(_answer);
+	answerString = _answer;
+}
+
+void Stage::saveStage()
+{
+    QFileInfo fileInfo(__FILE__);
+    QDir sourceDir = fileInfo.dir();
+    QString n = name; n.remove(QChar('\n'));
+    qDebug() << sourceDir.filePath(QString("Stage/") + n + ".txt");
+    QFile file(sourceDir.filePath(QString("Stage/") + n + ".txt"));
+	if (!file.open(QIODevice::WriteOnly))
+	{
+		qDebug() << "Failed to open file"<<file.errorString();
+		return;
+	}
+	QTextStream out(&file); out.setAutoDetectUnicode(true);
+    if(answer!=nullptr)
+	out << name << scriptDescription << caseDescription<<QString(answer->toPlainText());
+    else
+	out << name << scriptDescription << caseDescription << answerString;
+	file.close();
+	//loadStage(QString("Stage/") + n + ".txt");
+	//qDebug() << name << scriptDescription << caseDescription << answerString;
+}
+
+void Stage::loadStage(QString path)
+{
+    QFileInfo fileInfo(__FILE__);
+    QDir sourceDir = fileInfo.dir();
+	QFile file(sourceDir.filePath(path));
+	qDebug() << sourceDir.filePath(path);
+	if (!file.open(QIODevice::ReadOnly))
+	{
+		qDebug() << "Failed to open file";
+		return;
+	}
+    QTextStream in(&file); in.setAutoDetectUnicode(true);
+    name = in.readLine(); scriptDescription = in.readLine(); caseDescription = in.readLine()+QString("\n"); caseDescription += in.readLine(); answerString = in.readAll();
+	answer = new QTextDocument();
+	answer->setPlainText(answerString);
+	file.close();
 }
