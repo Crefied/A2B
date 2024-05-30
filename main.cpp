@@ -27,12 +27,16 @@ int main(int argc, char *argv[])
         }
     }
 
-    w.resize(1200, 700);
-    gamewindow.resize(1200, 700);
+
+    w.resize(1600, 900);
+	gamewindow.resize(1600, 900);
+
     QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
     int x = (screenGeometry.width() - w.width()) / 2;
     int y = (screenGeometry.height() - w.height()) / 2;
     w.move(x,y-20);
+
+	gamewindow.move(x, y - 20);
 
 
     w.show();

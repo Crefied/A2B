@@ -17,15 +17,18 @@ public:
     ~GameWindow();
     Ui::GameWindow* ui;
 
+    Stage* stage;
+
+    void setStageInfo();//ÒÑ¾­¸üÐÂstageÐÅÏ¢²Åµ÷ÓÃ
 private slots:
     void on_run_clicked();
-
+    
     //void on_backButton_clicked();
 
 private:
 
     System * system;
-    Stage * stage;
+
 };
 
 

@@ -72,6 +72,11 @@ CMakeLists.txt.user*
 *.dll
 *.exe
 
-#visual studio files
+#filefolder
 .vs/
 out/
+
+#
+CMakePresets.json
+CMakeUserPresets.json
+CMakeLists.txt.user

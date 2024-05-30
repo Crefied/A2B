@@ -213,6 +213,7 @@ QString System::generateCase(Stage *_stage)
         {
         case 0:
             s.append('a');
+
             break;
         case 1:
             s.append('b');
@@ -220,6 +221,7 @@ QString System::generateCase(Stage *_stage)
         case 2:
             s.append('c');
             break;
+
         }
     }
     return s;
@@ -372,4 +374,11 @@ int Command::work(bool isAnswerCode,QString * _case)
         isUsed = true;
     }
     return 0;
+}
+
+Stage::Stage(QString _name, QString _scriptDescription, QString _caseDescription)
+{
+	name = _name;
+	scriptDescription = _scriptDescription;
+	caseDescription = _caseDescription;
 }
