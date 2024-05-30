@@ -142,8 +142,10 @@
           <rect>
            <x>10</x>
            <y>0</y>
+
            <width>1600</width>
            <height>900</height>
+
           </rect>
          </property>
          <property name="font">
@@ -237,7 +239,9 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
+
      <height>22</height>
+
     </rect>
    </property>
   </widget>
