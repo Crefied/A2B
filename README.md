@@ -1,11 +1,2 @@
-# A2B
-processing--------------------------------------
-## 2024.5.31
-- system中增加了多线程解决卡顿问题
-- 重写了和文本框的交互方式，现在变为信号传递，使用GameWindow内的updateOutputInfo进行显示
-- 增加了暂停和开始，速度调整等
-
-Q: 在测试时发现不能重新开始进行新的运行，可能是线程删除的问题
-Q2: 测试时发现目前设置最快速度（延时200ms）在debug下依然会卡顿，需要多测试
-
-Q2可供选择的解决方案： 在system中实现了不输出中间样例中间结果的update接口，把system中的update改为false即可使用，可以试一下
+# try
+This is built for the coming homework.
