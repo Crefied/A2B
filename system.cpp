@@ -5,12 +5,18 @@ Code::Code()
     command = NULL;
     commandLen = 0;
 }
-
+void Code::updateOutput(const QString & m,bool clear,bool update)
+{
+    if(update)
+        emit updateShow(m,clear);
+}
 void Code::process(QTextDocument * _doc)
 {
     int blocks = _doc->blockCount();
     commandLen = blocks - 1;
     command = new Command [blocks];
+    updateOutput("This time :" + QString::number(blocks));
+    //System::logWidget->append("This time :" + QString::number(blocks));
     for(int i = 0;i < blocks;++i)
     {
         QTextBlock t = _doc->findBlockByNumber(i); // 每一行的文本
@@ -36,7 +42,8 @@ void Code::process(QTextDocument * _doc)
                     else
                     {
                         // 处理多指令异常
-                        System::processError(CE_KS,i + 1);
+                        QString c = System::processError(CE_KS,i + 1);
+                        updateOutput(c);
                         return;
                     }
                 }
@@ -52,7 +59,8 @@ void Code::process(QTextDocument * _doc)
                     else
                     {
                         // 处理多指令异常
-                        System::processError(CE_KS,i + 1);
+                        QString c = System::processError(CE_KS,i + 1);
+                        updateOutput(c);
                         return;
                     }
                 }
@@ -68,7 +76,8 @@ void Code::process(QTextDocument * _doc)
                     else
                     {
                         // 处理多指令异常
-                        System::processError(CE_KS,i +1);
+                        QString c = System::processError(CE_KS,i + 1);
+                        updateOutput(c);
                         return;
                     }
                 }
@@ -84,7 +93,8 @@ void Code::process(QTextDocument * _doc)
                     else
                     {
                         // 处理多指令异常
-                        System::processError(CE_KS,i + 1);
+                        QString c = System::processError(CE_KS,i + 1);
+                        updateOutput(c);
                         return;
                     }
                 }
@@ -100,7 +110,8 @@ void Code::process(QTextDocument * _doc)
                     else
                     {
                         // 处理多指令异常
-                        System::processError(CE_KS,i + 1);
+                        QString c = System::processError(CE_KS,i + 1);
+                        updateOutput(c);
                         return;
                     }
                 }
@@ -116,43 +127,56 @@ void Code::process(QTextDocument * _doc)
                     else
                     {
                         // 处理多指令异常
-                        System::processError(CE_KS,i + 1);
+                        QString c = System::processError(CE_KS,i + 1);
+                        updateOutput(c);
                         return;
                     }
                 }
                 command[i].setCommandType(c);
                 command[i].setFindString( sList[0].trimmed()); // 移除首尾空白
                 command[i].setPutString(sList[1].trimmed());
+                connect(&command[i],&Command::updateShow,this,&Code::updateOutput); // 传递信号
             }
             else
             {
                 // 太多=了
-                System::processError(CE_ES,i + 1);
+                QString c = System::processError(CE_ES,i + 1);
+                updateOutput(c);;
+                return;
+            }
+        }
+        else
+        {
+            if(s.trimmed() == "") // 空行
+            {
+                return;
+            }
+            else
+            {
+                // 没有 =
+                QString c = System::processError(CE_EN,i + 1);
+                updateOutput(c);
                 return;
             }
 
         }
-        else
-        {
-            // 没有 =
-            System::processError(CE_EN,i + 1);
-            return;
-        }
 
     }
 }
-QString Code::execute(QString testcase,bool isAnswerCode)
+QString Code::execute(QString testcase,bool isAnswerCode,bool _update)
 {
     bool isEnd = false;
     int looptime = 0;
     if(!isAnswerCode) // 测试代码输出初始例子
-        System::logWidget->append(testcase);
+        updateOutput(testcase,false,_update);
     while(!isEnd)
     {
         looptime++;
         if(looptime >= MAXTIME) // 陷入了循环
         {
-            System::processError(TLE,0);
+            QString c = System::processError(TLE,0);
+            updateOutput(c);
+            break;
         }
         for(int i = 0;i <= commandLen + 1;++i)
         {
@@ -169,7 +193,7 @@ QString Code::execute(QString testcase,bool isAnswerCode)
             else if(result == 0) // 成功找到
             {
                 if(!isAnswerCode) // 输出当前修改情况
-                    System::logWidget->append(testcase);
+                    updateOutput(testcase,false,_update);
                 break;
             }
         }
@@ -179,26 +203,90 @@ QString Code::execute(QString testcase,bool isAnswerCode)
 /*
 ------------------------------------------------------------------------------------
 */
-void System::judge(Stage *_stage, Code * _input ,Code * _answer)
+void System::speedChange(bool adjust)
+{
+    if(adjust)
+    {
+        speed = std::max(2,speed + 1);
+    }
+    else
+    {
+        speed = std::min(0,speed - 1);
+    }
+}
+void System::setup()
+{
+    error = false;
+    update = true;
+    speed = 0;
+    isPause = false;
+    isStop = false;
+}
+void System::pause()
+{
+    QMutexLocker locker(&mutex);
+    isPause = true;
+}
+void System::resume()
+{
+    QMutexLocker locker(&mutex);
+    isPause = false;
+    condition.wakeAll();
+}
+void System::stop()
+{
+    isStop = true;
+}
+void System::judge(Stage *_stage, Code * _input ,Code * _answer,bool update)
 {
     for(int i = 0;i < 3287;++i)
     {
-        logWidget->clear();
-        logWidget->append("Test Case: " + QString::number(i));
+        if(isPause)
+        {
+            mutex.lock();
+            condition.wait(&mutex);
+            mutex.unlock();
+        }
+        if(isStop)
+        {
+            break;
+        }
+        updateOutput("",true); // 清除
+        updateOutput("Test Case: " + QString::number(i));
+        //logWidget->clear();
+        //logWidget->append("Test Case: " + QString::number(i));
         QString testcase = generateCase(_stage);
-        logWidget->append("Input: " + testcase + "\n"); // 显示初始case
-
+        updateOutput("Input: " + testcase + "\n");
+        //logWidget->append("Input: " + testcase + "\n"); // 显示初始case
         QString inputString = _input->execute(testcase,false); // 执行输入代码
         QString answerString = _answer->execute(testcase,true); // 计算正确值
         if(inputString != answerString)
         {
-            processError(WA,0,&inputString,&answerString); // 有case 错误
+            QString c = processError(WA,0,&inputString,&answerString); // 有case 错误
+            updateOutput(c);
             return;
         }
         else
         {
+            updateOutput("Your answer: " +answerString);
             caseAC();
         }
+        if(speed == 0)
+        {
+            QThread::msleep(1000);
+        }
+        if(speed == 1)
+        {
+            QThread::msleep(600);
+        }
+        if(speed == 2)
+        {
+            QThread::msleep(200);
+        }
+    }
+    if(isStop)
+    {
+        return;
     }
     allCaseAC();
     return;
@@ -213,7 +301,6 @@ QString System::generateCase(Stage *_stage)
         {
         case 0:
             s.append('a');
-
             break;
         case 1:
             s.append('b');
@@ -221,7 +308,6 @@ QString System::generateCase(Stage *_stage)
         case 2:
             s.append('c');
             break;
-
         }
     }
     return s;
@@ -232,6 +318,8 @@ void System::run(Stage * _stage,QTextDocument * _input,bool _debug) // incomplet
     System::error = false;
     Code test = Code();
     Code answer = Code();
+    connect(&test,&Code::updateShow,this,&System::updateOutput);
+    connect(&answer,&Code::updateShow,this,&System::updateOutput);
     test.process(_input);
     if(error)
     {
@@ -242,20 +330,21 @@ void System::run(Stage * _stage,QTextDocument * _input,bool _debug) // incomplet
     {
         return;
     }
-    judge(_stage,&test,&answer);
+    judge(_stage,&test,&answer,update);
+    emit CalEnd(0);
 }
 void System::caseAC()
 {
-    logWidget->append("Accepted");
+    updateOutput("Accepted");
+    //logWidget->append("Accepted");
 }
 void System::allCaseAC()
 {
     // incomplete
 }
 bool System::error = false;
-QTextBrowser * System::logWidget = nullptr;
 
-void System::processError(Error _error,int line,QString * inputString,QString * answerString) // incomplete
+QString System::processError(Error _error,int line,QString * inputString,QString * answerString) // incomplete
 {
     error = true;
     QString report = QString();
@@ -271,13 +360,19 @@ void System::processError(Error _error,int line,QString * inputString,QString * 
         report += "Compile error.\n Too many key words / used key word not in valid key words.\n at line " + QString::number(line);
         break;
     case CE_ES:
-        report += "Compile error.\n no ‘=’ at line " + QString::number(line);
-        break;
-    case CE_EN:
         report += "Compile error.\n too many = at line " + QString::number(line);
         break;
+    case CE_EN:
+        report += "Compile error.\n no ‘=’ at line " + QString::number(line);
+        break;
     }
-    logWidget->append(report);
+    return report;
+}
+
+void System::updateOutput(const QString & m,bool clear,bool update)
+{
+    if(update)
+        emit System::updateShow(m,clear);
 }
 /*
 ------------------------------------------------------------------------------------
@@ -311,11 +406,13 @@ void Command::setCommandType(CommandType _c)
     c.isReturn = _c.isReturn;
     isUsed = false;
 }
-
-int Command::work(bool isAnswerCode,QString * _case)
+void Command::updateOutput(const QString & m,bool clear,bool update)
 {
-    if(!isAnswerCode)
-        System::logWidget->append("    " + stringCode);
+    if(update)
+        emit updateShow(m,clear);
+}
+int Command::work(bool isAnswerCode,QString * _case,bool _update)
+{
     if(!isUsed) // 如果是可以被使用的
     {
         int pos = -1;
@@ -323,6 +420,8 @@ int Command::work(bool isAnswerCode,QString * _case)
         {
             if(_case->indexOf(findString) == 0)
             {
+                if(!isAnswerCode)
+                    updateOutput("    " + stringCode,false,_update);
                 pos = _case->indexOf(findString);
                 _case->remove(pos,findString.length());
             }
@@ -331,6 +430,8 @@ int Command::work(bool isAnswerCode,QString * _case)
         {
             if(_case->lastIndexOf(findString) == _case->length() - 1)
             {
+                if(!isAnswerCode)
+                    updateOutput("    " + stringCode,false,_update);
                 pos = _case->indexOf(findString);
                 _case->remove(pos,findString.length());
             }
@@ -339,6 +440,8 @@ int Command::work(bool isAnswerCode,QString * _case)
         {
             if(_case->indexOf(findString) != -1)
             {
+                if(!isAnswerCode)
+                    updateOutput("    " + stringCode,false,_update);
                 pos = _case->indexOf(findString);
                 _case->remove(pos,findString.length());
             }
@@ -376,52 +479,9 @@ int Command::work(bool isAnswerCode,QString * _case)
     return 0;
 }
 
-Stage::Stage(QString _name, QString _scriptDescription, QString _caseDescription,QString _answer)
+Stage::Stage(QString _name, QString _scriptDescription, QString _caseDescription)
 {
 	name = _name;
 	scriptDescription = _scriptDescription;
 	caseDescription = _caseDescription;
-    answer = new QTextDocument();
-	answer->setPlainText(_answer);
-	answerString = _answer;
-}
-
-void Stage::saveStage()
-{
-    QFileInfo fileInfo(__FILE__);
-    QDir sourceDir = fileInfo.dir();
-    QString n = name; n.remove(QChar('\n'));
-    qDebug() << sourceDir.filePath(QString("Stage/") + n + ".txt");
-    QFile file(sourceDir.filePath(QString("Stage/") + n + ".txt"));
-	if (!file.open(QIODevice::WriteOnly))
-	{
-		qDebug() << "Failed to open file"<<file.errorString();
-		return;
-	}
-	QTextStream out(&file); out.setAutoDetectUnicode(true);
-    if(answer!=nullptr)
-	out << name << scriptDescription << caseDescription<<QString(answer->toPlainText());
-    else
-	out << name << scriptDescription << caseDescription << answerString;
-	file.close();
-	//loadStage(QString("Stage/") + n + ".txt");
-	//qDebug() << name << scriptDescription << caseDescription << answerString;
-}
-
-void Stage::loadStage(QString path)
-{
-    QFileInfo fileInfo(__FILE__);
-    QDir sourceDir = fileInfo.dir();
-	QFile file(sourceDir.filePath(path));
-	qDebug() << sourceDir.filePath(path);
-	if (!file.open(QIODevice::ReadOnly))
-	{
-		qDebug() << "Failed to open file";
-		return;
-	}
-    QTextStream in(&file); in.setAutoDetectUnicode(true);
-    name = in.readLine(); scriptDescription = in.readLine(); caseDescription = in.readLine()+QString("\n"); caseDescription += in.readLine(); answerString = in.readAll();
-	answer = new QTextDocument();
-	answer->setPlainText(answerString);
-	file.close();
 }
