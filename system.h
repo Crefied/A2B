@@ -12,6 +12,7 @@
 #include<QFile>
 #include<QFileInfo>
 #include<QDir>
+#include<QThread>
 class Command;
 class System;
 /*
