@@ -24,7 +24,7 @@ void gamewindow_designed::on_Run_clicked()
    // stage->answer = ;
     //
     //
-    System::logWidget = ui->Log;
+    //System::logWidget = ui->Log;
     system->run(stage,ui->IDE->document(),false);
 }
 

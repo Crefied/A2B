@@ -80,7 +80,7 @@ MainWindow::MainWindow(GameWindow *_gamewindow, QWidget *parent)
 MainWindow::~MainWindow()
 {
     ui->stackedWidget->removeWidget(gamewindow);
-    // delete ui;
+    delete ui;
 }
 
 void MainWindow::on_pushButton_clicked()
