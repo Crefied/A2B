@@ -44,11 +44,13 @@ MainWindow::MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _d
     //stackedWidget 0:startMenus,1:stageMenus,2:optionMenus,3:modeWidget,4:editorWindow
 
     ui->stackedWidget->layout()->setAlignment(Qt::AlignRight);
-    this->setGeometry(0, 0, 800, 600);
+    this->setGeometry(0, 0, 1600,900);
     ui->stackedWidget->addWidget(designedWindow); //会导致关闭程序时读写错误，应该是delete指针的问题，采用hide show的方法替代
 
     connect(gamewindow->ui->backButton, &QPushButton::clicked, this, [&]()
         {
+			this->setGeometry(gamewindow->geometry());
+			this->resize(gamewindow->size());
             gamewindow->hide();
             this->show();
             ui->stackedWidget->setCurrentIndex(0);
@@ -86,7 +88,10 @@ MainWindow::MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _d
             connect(button, &QPushButton::clicked, this, [&, i, buttonIndex]()
                 {
                     gamewindow->stage = stages[i + 1][buttonIndex];//begin:i+1=1,buttonIndex=1,第一章第一关
+					gamewindow->ui->Puzzle->clear();
                     gamewindow->setStageInfo();
+					this->gamewindow->setGeometry(this->geometry());
+					this->gamewindow->resize(this->size());
                     this->gamewindow->show();
                     this->hide();
 
