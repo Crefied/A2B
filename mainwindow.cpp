@@ -19,7 +19,7 @@ MainWindow::MainWindow(GameWindow *_gamewindow, QWidget *parent)
     gamewindow = _gamewindow;
     stageAble[1][1] = true; // 第一关可用
     // 建议在这里初始化所有stages信息
-    stages[1][1] = new Stage("As beginning\n", "You need to replace a string`s all a with b\n", "Input example:abac\nOutput example:bbbc\n");
+    stages[1][1] = new Stage("As beginning\n", "You need to replace a string`s all a with b\n", "Input example:abac\nOutput example:bbbc\n","a=b");
 
     QFile file(styleSheetPath);
     if (file.open(QFile::ReadOnly))

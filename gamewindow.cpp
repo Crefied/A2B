@@ -10,13 +10,17 @@ GameWindow::GameWindow(QWidget *parent)
     stage = new Stage();
     thread = NULL;
     isRunning = false;
+    connect(ui->upload, &QPushButton::clicked, this, [=]()
+        {
+            this->stage->saveStage();
+        });
 }
 
 GameWindow::~GameWindow()
 {
-    //delete ui;
-    //delete system;
-    //delete stage;
+    delete ui;
+    delete system;
+    delete stage;
 }
 
 void GameWindow::on_run_clicked()

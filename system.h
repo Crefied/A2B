@@ -10,7 +10,9 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QMutex>
-
+#include<QFile>
+#include<QFileInfo>
+#include<QDir>
 class Command;
 class System;
 /*
@@ -56,19 +58,21 @@ signals:
 
 struct Stage // 关卡类
 {
-    QTextDocument * description; // 代码描述
-    QTextDocument * answer; // 原始代码
+    QTextDocument* description; // 代码描述
+    QTextDocument* answer; // 原始代码
     int caseMinLen = 1; // 最小例子长度
     int caseMaxLen = 7; // 最大例子长度
 
-	QString name; // 关卡名
-	QString scriptDescription;// 关卡描述
-
-	QString caseDescription; // 例子描述
-    Stage(){};
-	Stage(QString _name, QString _scriptDescription, QString _caseDescription);
-
+    QString name; // 关卡名
+    QString scriptDescription;// 关卡描述
+    QString caseDescription; // 例子描述
+    QString answerString;
+    Stage() {};
+    Stage(QString _name, QString _scriptDescription, QString _caseDescription, QString answer);
+    void saveStage();
+    void loadStage(QString path); // path:QString("Stage/") + n + ".txt" !!! n需要name去掉 QChar('\n')
 };
+
 
 class System: public QObject // 字符处理类
 {
