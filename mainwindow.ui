@@ -107,6 +107,9 @@
               <pointsize>18</pointsize>
              </font>
             </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>开始游戏</string>
             </property>
@@ -121,6 +124,9 @@
              <font>
               <pointsize>18</pointsize>
              </font>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
             </property>
             <property name="text">
              <string>设置</string>
@@ -137,6 +143,9 @@
               <pointsize>18</pointsize>
              </font>
             </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>关卡编辑器</string>
             </property>
@@ -152,6 +161,43 @@
            </widget>
           </item>
          </layout>
+        </widget>
+        <widget class="QLabel" name="gameTitle">
+         <property name="geometry">
+          <rect>
+           <x>790</x>
+           <y>160</y>
+           <width>351</width>
+           <height>151</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>80</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>A = B</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>780</x>
+           <y>300</y>
+           <width>591</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>An One-Instruction Esolang</string>
+         </property>
         </widget>
        </widget>
        <widget class="QWidget" name="stageWidget">
@@ -201,6 +247,9 @@
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
              <widget class="QPushButton" name="Stage1_1">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
               <property name="text">
                <string>Stage1</string>
               </property>
@@ -211,6 +260,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="stage1_2">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
               <property name="text">
                <string>Stage2</string>
               </property>
@@ -253,6 +305,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QPushButton" name="storyMode">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>正常模式</string>
             </property>
@@ -263,6 +318,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="selfMode">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>自定义模式</string>
             </property>
@@ -300,7 +358,7 @@
         </sizepolicy>
        </property>
        <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
+        <cursorShape>PointingHandCursor</cursorShape>
        </property>
        <property name="text">
         <string>返回目录</string>
@@ -340,7 +398,7 @@
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>

@@ -235,6 +235,7 @@ void System::resume()
 }
 void System::stop()
 {
+    resume();
     isStop = true;
 }
 void System::judge(Stage *_stage, Code * _input ,Code * _answer,bool update)
@@ -263,7 +264,7 @@ void System::judge(Stage *_stage, Code * _input ,Code * _answer,bool update)
         if(inputString != answerString)
         {
             QString c = processError(WA,0,&inputString,&answerString); // 有case 错误
-            updateOutput(c);
+            updateOutput(c); // 更新文本
             return;
         }
         else
@@ -271,7 +272,7 @@ void System::judge(Stage *_stage, Code * _input ,Code * _answer,bool update)
             updateOutput("Your answer: " +answerString);
             caseAC();
         }
-        if(speed == 0)
+        if(speed == 0) // 设置速度
         {
             QThread::msleep(1000);
         }
@@ -281,8 +282,9 @@ void System::judge(Stage *_stage, Code * _input ,Code * _answer,bool update)
         }
         if(speed == 2)
         {
-            QThread::msleep(200);
+            QThread::msleep(400);
         }
+        emit System::updateProgress(i,false); // 暂停输出
     }
     if(isStop)
     {

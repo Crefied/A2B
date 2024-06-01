@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>700</height>
+    <width>1257</width>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>A2B</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/QSS_IMG/icon.png</normaloff>:/QSS_IMG/icon.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(31, 30, 51);
@@ -21,7 +25,7 @@
    <property name="geometry">
     <rect>
      <x>360</x>
-     <y>270</y>
+     <y>310</y>
      <width>91</width>
      <height>31</height>
     </rect>
@@ -40,7 +44,7 @@ font: 700 20pt &quot;Consolas&quot;;</string>
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>300</y>
+     <y>350</y>
      <width>611</width>
      <height>351</height>
     </rect>
@@ -55,7 +59,7 @@ color:white;</string>
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>300</y>
+     <y>350</y>
      <width>401</width>
      <height>351</height>
     </rect>
@@ -70,9 +74,9 @@ color:white;</string>
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>80</y>
+     <y>30</y>
      <width>611</width>
-     <height>181</height>
+     <height>271</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -84,8 +88,8 @@ color: rgb(0, 255, 0);</string>
   <widget class="QPushButton" name="backButton">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>660</y>
+     <x>10</x>
+     <y>710</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -104,8 +108,8 @@ text-decoration: underline;</string>
     <rect>
      <x>50</x>
      <y>30</y>
-     <width>331</width>
-     <height>231</height>
+     <width>401</width>
+     <height>271</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -114,58 +118,11 @@ font: 14pt &quot;Consolas&quot;;
 color:white;</string>
    </property>
   </widget>
-  <widget class="QWidget" name="ProgressFrame" native="true">
-   <property name="geometry">
-    <rect>
-     <x>530</x>
-     <y>30</y>
-     <width>611</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border:2px solid white;</string>
-   </property>
-   <widget class="QWidget" name="Progress" native="true">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>0</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:green;
-</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QPlainTextEdit" name="plainTextEdit">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>40</y>
-     <width>91</width>
-     <height>221</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 700 24pt &quot;Consolas&quot;;
-color:white;</string>
-   </property>
-   <property name="plainText">
-    <string>
-
-STAGE
-CUSTOM</string>
-   </property>
-  </widget>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>260</y>
+     <y>300</y>
      <width>611</width>
      <height>51</height>
     </rect>
@@ -173,6 +130,9 @@ CUSTOM</string>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QPushButton" name="pause">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">font: 700 20pt &quot;Consolas&quot;;
 text-decoration: underline;
@@ -185,6 +145,9 @@ color:white;</string>
     </item>
     <item>
      <widget class="QPushButton" name="start">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">font: 700 20pt &quot;Consolas&quot;;
 text-decoration: underline;
@@ -197,6 +160,9 @@ color:white;</string>
     </item>
     <item>
      <widget class="QPushButton" name="slow">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">font: 700 20pt &quot;Consolas&quot;;
 text-decoration: underline;
@@ -209,6 +175,9 @@ color:white;</string>
     </item>
     <item>
      <widget class="QPushButton" name="run">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">font: 700 20pt &quot;Consolas&quot;;
 text-decoration: underline;
@@ -221,6 +190,9 @@ color:white;</string>
     </item>
     <item>
      <widget class="QPushButton" name="quick">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">font: 700 20pt &quot;Consolas&quot;;
 text-decoration: underline;
@@ -233,6 +205,9 @@ color:white;</string>
     </item>
     <item>
      <widget class="QPushButton" name="stop">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">font: 700 20pt &quot;Consolas&quot;;
 text-decoration: underline;
@@ -245,6 +220,33 @@ color:white;</string>
     </item>
    </layout>
   </widget>
+  <widget class="QProgressBar" name="progressBar">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>30</y>
+     <width>611</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>3267</number>
+   </property>
+   <property name="value">
+    <number>0</number>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <zorder>upload</zorder>
+  <zorder>IDE</zorder>
+  <zorder>view</zorder>
+  <zorder>backButton</zorder>
+  <zorder>Puzzle</zorder>
+  <zorder>horizontalLayoutWidget</zorder>
+  <zorder>progressBar</zorder>
+  <zorder>Output</zorder>
  </widget>
  <resources/>
  <connections/>

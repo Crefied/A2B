@@ -104,6 +104,7 @@ public:
 signals:
     void updateShow(const QString & m,bool clear = false,bool update = true);
     void CalEnd(int returnCode);
+    void updateProgress(int clear,bool error);
 };
 
 

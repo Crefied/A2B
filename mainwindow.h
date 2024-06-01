@@ -29,7 +29,7 @@ public:
     bool stageAble[10][10] = { false };
 
     //MainWindow(QWidget *parent = nullptr);
-    MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _designedWindow, QWidget* parent = nullptr);
+    MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _designedWindow = NULL, QWidget* parent = nullptr);
     ~MainWindow();
     
 

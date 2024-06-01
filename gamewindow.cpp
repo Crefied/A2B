@@ -8,8 +8,8 @@ GameWindow::GameWindow(QWidget *parent)
     system = NULL;
     stage = new Stage();
     thread = NULL;
-
     isRunning = false;
+    progressBar_init();
     connect(ui->upload, &QPushButton::clicked, this, [=]()
             { this->stage->saveStage(); });
 }
@@ -17,7 +17,7 @@ GameWindow::GameWindow(QWidget *parent)
 GameWindow::~GameWindow()
 {
     delete ui;
-    delete system;
+    // delete system;
     // delete stage;
 }
 
@@ -33,6 +33,7 @@ void GameWindow::on_run_clicked()
         connect(system, &System::CalEnd, this, &GameWindow::threadEnd, Qt::DirectConnection);
         connect(thread, &QThread::finished, thread, &QThread::deleteLater, Qt::DirectConnection);
         connect(thread, &QThread::finished, system, &QObject::deleteLater, Qt::DirectConnection);
+        connect(system,&System::updateProgress,this,&GameWindow::progressBar_update);
         stage->answer = ui->view->document(); // 设置答案
         thread->start();                      // 线程开始
         // connect(this,&GameWindow::resume,system,&System::resume, Qt::QueuedConnection);
@@ -40,7 +41,6 @@ void GameWindow::on_run_clicked()
         // connect(this,&GameWindow::pause,system,&System::pause, Qt::QueuedConnection);
         // connect(this,&GameWindow::speedChange,system,&System::speedChange, Qt::QueuedConnection);
         emit startThread(stage, ui->IDE->document(), false); // 开始计算
-        ui->Progress->resize(611, 31);
         isRunning = true;
     }
 }
@@ -66,6 +66,7 @@ void GameWindow::threadEnd()
 {
     thread->quit();
     thread->wait();
+    progressBar_init();
     isRunning = false;
 }
 
@@ -104,4 +105,16 @@ void GameWindow::on_stop_clicked()
         system->isStop = true;
         ui->Output->clear();
     }
+}
+void GameWindow::progressBar_init()
+{
+    ui->progressBar->setFormat("");
+    ui->progressBar->setAlignment(Qt::AlignCenter);
+    ui->progressBar->setValue(0);
+}
+void GameWindow::progressBar_update(int amount,bool error)
+{
+    ui->progressBar->setFormat(QString::number(amount) + "/ 3267");
+    ui->progressBar->setAlignment(Qt::AlignVCenter);
+    ui->progressBar->setValue(amount);
 }

@@ -36,6 +36,9 @@ private slots:
 
     void on_stop_clicked();
 
+    void progressBar_update(int amount,bool error);
+
+    void progressBar_init();
 signals:
     void startThread(Stage * _stage,QTextDocument * _input,bool _debug);
     void speedChange(bool adjust);
@@ -44,7 +47,7 @@ signals:
     void resume();
     // void on_backButton_clicked();
 
-private:
+protected:
     System * system;
     QThread * thread;
 };
