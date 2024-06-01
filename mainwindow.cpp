@@ -106,6 +106,8 @@ MainWindow::MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _d
                 {
                     gamewindow->stage = stages[i + 1][buttonIndex];//begin:i+1=1,buttonIndex=1,第一章第一关
 					gamewindow->ui->Puzzle->clear();
+                    gamewindow->ui->view->clear();
+					gamewindow->ui->view->setReadOnly(true);
                     gamewindow->setStageInfo();
 					this->gamewindow->setGeometry(this->geometry());
 					this->gamewindow->resize(this->size());
@@ -117,14 +119,23 @@ MainWindow::MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _d
     }
     connect(ui->editorPushButton, &QPushButton::clicked, this, [&]()
         {
-            ui->stackedWidget->setCurrentIndex(4);
+            gamewindow->stage = stages[1][1];//begin:i+1=1,buttonIndex=1,第一章第一关
+            gamewindow->ui->Puzzle->clear();
+			gamewindow->ui->view->clear();
+            gamewindow->ui->view->setReadOnly(true);
+            gamewindow->ui->view->setPlainText(QString("Change stage information on the left top box\nGive your stage standard answer on the left down box\nThen click upload to save your stage"));
+            gamewindow->setStageInfo();
+            this->gamewindow->setGeometry(this->geometry());
+            this->gamewindow->resize(this->size());
+            this->gamewindow->show();
+            this->hide();
         });
 
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete ui; 
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -145,6 +156,9 @@ void MainWindow::selfModeSlot()
 		}
 		delete item;
 	}
+	gamewindow->ui->view->clear();
+    gamewindow->ui->Puzzle->clear();
+    gamewindow->ui->view->setReadOnly(true);
 
 	QFileInfo fileInfo(__FILE__);
 	QDir sourceDir = fileInfo.dir();
