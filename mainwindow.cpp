@@ -64,6 +64,16 @@ MainWindow::MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _d
 
     connect(ui->startPushButton, &QPushButton::clicked, this, [&]()
         {
+            QLayout* lay = ui->verticalLayout_4;
+            //删除lay的所有
+            while (QLayoutItem* item = lay->takeAt(0))
+            {
+                if (QWidget* widget = item->widget())
+                {
+                    widget->deleteLater();
+                }
+                delete item;
+            }
             ui->stackedWidget->setCurrentIndex(3);
         });
 
@@ -144,10 +154,7 @@ void MainWindow::selfModeSlot()
     {
 		QString stageName = stageFile.fileName();
 		QString _filePath = stageFile.absoluteFilePath();
-		QPushButton* button = new QPushButton(stageName);
-        button->setStyleSheet(styleSheet);
-        button->setFlat(true);
-		ui->verticalLayout_4->addWidget(button);
+
 		QFile file(_filePath);
 		if (file.open(QFile::ReadOnly))
 		{
@@ -158,9 +165,14 @@ void MainWindow::selfModeSlot()
 			exampleCase += "\n";
             exampleCase += in.readLine();
 			QString answer = in.readAll();
+            QPushButton* button = new QPushButton(name);
+            button->setStyleSheet(styleSheet);
+            button->setFlat(true);
+            ui->verticalLayout_4->addWidget(button);
 			connect(button, &QPushButton::clicked, this, [&, name, scriptDescription, exampleCase, answer]()
 				{
 					gamewindow->stage = new Stage(name, scriptDescription, exampleCase, answer);
+					//button->setText(name);
 					gamewindow->setStageInfo();
                     this->gamewindow->setGeometry(this->geometry());
                     this->gamewindow->resize(this->size());

@@ -9,7 +9,7 @@ QTextEdit {
 QPushButton{
 	text-decoration: underline;
 	color:white;
-	font: 700 20pt "Consolas";
+	font: 700 20pt "Microsoft YaHei UI";
 }
 QPushButton:hover{
 	
