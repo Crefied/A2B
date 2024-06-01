@@ -74,13 +74,13 @@ void GameWindow::threadEnd()
 
 void GameWindow::on_pause_clicked()
 {
-    if (thread->isRunning())
+    if (isRunning)
         system->isPause = true;
 }
 
 void GameWindow::on_start_clicked()
 {
-    if (thread->isRunning())
+    if (isRunning)
     {
         QMutexLocker locker(&system->mutex);
         system->isPause = false;
@@ -90,19 +90,19 @@ void GameWindow::on_start_clicked()
 
 void GameWindow::on_slow_clicked()
 {
-    if (thread->isRunning())
+    if (isRunning)
         system->speed = std::min(0, system->speed - 1);
 }
 
 void GameWindow::on_quick_clicked()
 {
-    if (thread->isRunning())
+    if (isRunning)
         system->speed = std::max(2, system->speed + 1);
 }
 
 void GameWindow::on_stop_clicked()
 {
-    if (thread->isRunning())
+    if (isRunning)
     {
         system->isStop = true;
         ui->Output->clear();
