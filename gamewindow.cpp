@@ -20,7 +20,7 @@ GameWindow::~GameWindow()
 {
     delete ui;
     delete system;
-    delete stage;
+    //delete stage;
 }
 
 void GameWindow::on_run_clicked()

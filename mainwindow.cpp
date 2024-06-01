@@ -22,6 +22,7 @@ MainWindow::MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _d
     stageAble[1][1] = true; // 第一关可用
     // 建议在这里初始化所有stages信息
     stages[1][1] = new Stage("As beginning\n", "You need to replace a string`s all a with b\n", "Input example:abac\nOutput example:bbbc\n", "a=b");
+	stages[1][2] = new Stage("More Difficult\n", "Remove all a\n", "Input example:abac\nOutput example:bc\n", "a= ");
 
     QFile file(styleSheetPath);
     if (file.open(QFile::ReadOnly))
@@ -63,7 +64,7 @@ MainWindow::MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _d
 
     connect(ui->startPushButton, &QPushButton::clicked, this, [&]()
         {
-            ui->stackedWidget->setCurrentIndex(1);
+            ui->stackedWidget->setCurrentIndex(3);
         });
 
     connect(ui->backPushButton, &QPushButton::clicked, this, [&]()
@@ -74,6 +75,12 @@ MainWindow::MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _d
         {
             ui->stackedWidget->setCurrentIndex(2);
         });
+	connect(ui->storyMode, &QPushButton::clicked, this, [&]()
+		{
+			ui->stackedWidget->setCurrentIndex(1);
+		});
+	connect(ui->selfMode, &QPushButton::clicked, this, &MainWindow::selfModeSlot);
+		
 
     QTabWidget* tabWidget = ui->tabWidget;
     for (int i = 0; i < tabWidget->count(); ++i)
@@ -100,7 +107,7 @@ MainWindow::MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _d
     }
     connect(ui->editorPushButton, &QPushButton::clicked, this, [&]()
         {
-            stackedWidget->setCurrentIndex(4);
+            ui->stackedWidget->setCurrentIndex(4);
         });
 
 }
@@ -114,4 +121,54 @@ void MainWindow::on_pushButton_clicked()
 {
     this->hide();
     this->gamewindow->show();
+}
+
+void MainWindow::selfModeSlot()
+{
+    QLayout* lay = ui->verticalLayout_4;
+	//删除lay的所有
+	while (QLayoutItem* item = lay->takeAt(0))
+	{
+		if (QWidget* widget = item->widget())
+		{
+			widget->deleteLater();
+		}
+		delete item;
+	}
+
+	QFileInfo fileInfo(__FILE__);
+	QDir sourceDir = fileInfo.dir();
+	QString stagePath = sourceDir.filePath("Stage/");
+	QFileInfoList stageList = QDir(stagePath).entryInfoList(QDir::Files);
+	for (const QFileInfo& stageFile : stageList)
+    {
+		QString stageName = stageFile.fileName();
+		QString _filePath = stageFile.absoluteFilePath();
+		QPushButton* button = new QPushButton(stageName);
+        button->setStyleSheet(styleSheet);
+        button->setFlat(true);
+		ui->verticalLayout_4->addWidget(button);
+		QFile file(_filePath);
+		if (file.open(QFile::ReadOnly))
+		{
+			QTextStream in(&file);
+			QString name = in.readLine();
+			QString scriptDescription = in.readLine();
+			QString exampleCase = in.readLine();
+			exampleCase += "\n";
+            exampleCase += in.readLine();
+			QString answer = in.readAll();
+			connect(button, &QPushButton::clicked, this, [&, name, scriptDescription, exampleCase, answer]()
+				{
+					gamewindow->stage = new Stage(name, scriptDescription, exampleCase, answer);
+					gamewindow->setStageInfo();
+                    this->gamewindow->setGeometry(this->geometry());
+                    this->gamewindow->resize(this->size());
+                    this->gamewindow->show();
+                    this->hide();
+				});
+		}
+        else
+			qDebug() << "Failed to open stage file" << file.errorString() << QDir::currentPath();
+	}
 }

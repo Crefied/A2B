@@ -1,0 +1,5 @@
+More Difficult
+Remove all a
+Input example:abac
+Output example:bc
+a= 

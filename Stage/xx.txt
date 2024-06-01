@@ -1,5 +1,0 @@
-As beginning
-You need to replace a string`s all a with b
-Input example:abac
-Output example:bbbc
-a=b

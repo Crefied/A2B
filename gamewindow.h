@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPointer>
+#include<qsharedpointer.h>
 #include "system.h"
 namespace Ui
 {
@@ -17,7 +18,7 @@ public:
     GameWindow(QWidget *parent = nullptr);
     ~GameWindow();
     Ui::GameWindow *ui;
-    Stage *stage;
+    Stage* stage;
     bool isRunning;
     void setStageInfo(); // 已经更新stage信息才调用
     void updateOutputInfo(const QString & info,bool clear); // info 是输入信息，clear 是清屏

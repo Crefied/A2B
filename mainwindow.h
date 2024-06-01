@@ -31,10 +31,11 @@ public:
     //MainWindow(QWidget *parent = nullptr);
     MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _designedWindow, QWidget* parent = nullptr);
     ~MainWindow();
+    
 
 private slots:
     void on_pushButton_clicked();
-
+    void selfModeSlot();
 private:
     Ui::MainWindow* ui;
     QPointer<GameWindow> gamewindow;
