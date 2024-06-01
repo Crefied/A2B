@@ -70,8 +70,8 @@ void Code::process(QTextDocument * _doc)
                     {
                         firstKeyword = true;
                         c.isStartPut = true;
-                        int st = sList[0].indexOf("(start)");
-                        sList[0].remove(st,7); // 去除关键字
+                        int st = sList[1].indexOf("(start)");
+                        sList[1].remove(st,7); // 去除关键字
                     }
                     else
                     {
@@ -104,8 +104,8 @@ void Code::process(QTextDocument * _doc)
                     {
                         firstKeyword = true;
                         c.isEndPut = true;
-                        int st = sList[0].indexOf("(end)");
-                        sList[0].remove(st,5); // 去除关键字
+                        int st = sList[1].indexOf("(end)");
+                        sList[1].remove(st,5); // 去除关键字
                     }
                     else
                     {
@@ -121,8 +121,8 @@ void Code::process(QTextDocument * _doc)
                     {
                         firstKeyword = true;
                         c.isReturn = true;
-                        int st = sList[0].indexOf("(return)");
-                        sList[0].remove(st,8); // 去除关键字
+                        int st = sList[1].indexOf("(return)");
+                        sList[1].remove(st,8); // 去除关键字
                     }
                     else
                     {
@@ -194,6 +194,13 @@ QString Code::execute(QString testcase,bool isAnswerCode,bool _update)
             {
                 if(!isAnswerCode) // 输出当前修改情况
                     updateOutput(testcase,false,_update);
+                break;
+            }
+            else if(result == 2)
+            {
+                if(!isAnswerCode) // 输出当前修改情况
+                    updateOutput(testcase,false,_update);
+                isEnd = true;
                 break;
             }
         }
@@ -284,7 +291,6 @@ void System::judge(Stage *_stage, Code * _input ,Code * _answer,bool update)
         {
             QThread::msleep(400);
         }
-        emit System::updateProgress(i,false); // 暂停输出
     }
     if(isStop)
     {
@@ -417,6 +423,12 @@ int Command::work(bool isAnswerCode,QString * _case,bool _update)
 {
     if(!isUsed) // 如果是可以被使用的
     {
+        if(c.isReturn)
+        {
+            _case->clear();
+            _case->append(putString);
+            return 2;
+        }
         int pos = -1;
         if(c.isStartFind)
         {
