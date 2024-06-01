@@ -23,26 +23,28 @@ GameWindow::~GameWindow()
 
 void GameWindow::on_run_clicked()
 {
-    if (!isRunning)
+
+    if(isRunning)
     {
-        system = new System();
-        thread = new QThread(this);
-        system->moveToThread(thread);
-        connect(this, &GameWindow::startThread, system, &System::run);             // 计算关联
-        connect(system, &System::updateShow, this, &GameWindow::updateOutputInfo); // 文本输出关联
-        connect(system, &System::CalEnd, this, &GameWindow::threadEnd, Qt::DirectConnection);
-        connect(thread, &QThread::finished, thread, &QThread::deleteLater, Qt::DirectConnection);
-        connect(thread, &QThread::finished, system, &QObject::deleteLater, Qt::DirectConnection);
-        connect(system,&System::updateProgress,this,&GameWindow::progressBar_update);
-        stage->answer = ui->view->document(); // 设置答案
-        thread->start();                      // 线程开始
-        // connect(this,&GameWindow::resume,system,&System::resume, Qt::QueuedConnection);
-        // connect(this,&GameWindow::stop,system,&System::stop, Qt::QueuedConnection);
-        // connect(this,&GameWindow::pause,system,&System::pause, Qt::QueuedConnection);
-        // connect(this,&GameWindow::speedChange,system,&System::speedChange, Qt::QueuedConnection);
-        emit startThread(stage, ui->IDE->document(), false); // 开始计算
-        isRunning = true;
+        threadEnd();
     }
+    system = new System();
+    thread = new QThread(this);
+    system->moveToThread(thread);
+    connect(this, &GameWindow::startThread, system, &System::run);             // 计算关联
+    connect(system, &System::updateShow, this, &GameWindow::updateOutputInfo); // 文本输出关联
+    connect(system, &System::CalEnd, this, &GameWindow::threadEnd, Qt::DirectConnection);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater, Qt::DirectConnection);
+    connect(thread, &QThread::finished, system, &QObject::deleteLater, Qt::DirectConnection);
+    connect(system,&System::updateProgress,this,&GameWindow::progressBar_update);
+    stage->answer = ui->view->document(); // 设置答案
+    thread->start();                      // 线程开始
+    // connect(this,&GameWindow::resume,system,&System::resume, Qt::QueuedConnection);
+    // connect(this,&GameWindow::stop,system,&System::stop, Qt::QueuedConnection);
+    // connect(this,&GameWindow::pause,system,&System::pause, Qt::QueuedConnection);
+    // connect(this,&GameWindow::speedChange,system,&System::speedChange, Qt::QueuedConnection);
+    emit startThread(stage, ui->IDE->document(), false); // 开始计算
+    isRunning = true;
 }
 
 // void GameWindow::on_backButton_clicked()
