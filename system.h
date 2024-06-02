@@ -22,6 +22,9 @@ class System;
 */
 
 const int MAXTIME = 800;
+const int MAXSPEED = 2;
+const int MINSPEED = 0;
+const int CASENUM = 80;
 enum Error {
     WA = 1,
     TLE,
@@ -29,7 +32,7 @@ enum Error {
     CE_ES,
     CE_EN
 };
-
+/*
 struct CommandType // 关键字种类，判断指令的操作
 {
     bool isOnce; // 一次运算
@@ -39,7 +42,7 @@ struct CommandType // 关键字种类，判断指令的操作
     bool isEndPut; // 右侧的end
     bool isReturn; // 右侧return
 };
-
+*/
 struct Code:public QObject // 代码块
 {
     Q_OBJECT
@@ -49,11 +52,12 @@ private:
     System * system;
 public:
     Code();
-    void process(QTextDocument * _doc);// 转化输入为代码
-    QString execute(QString testcase,bool isAnswerCode = false,bool _update = true);// 执行代码
-    void updateOutput(const QString & m,bool clear = false,bool update = true);
+    void processDocIntoCode(QTextDocument * _doc);// 转化输入为代码
+    int processKeyword(QString & source,const QString & keyword,Command & command,int line,bool isStart,bool isFirstKeyword);// 处理关键字
+    QString executeCode(QString testcase,bool isAnswerCode = false,bool _update = true);// 执行代码
+    void updateOutput(const QString & m,bool ScreenClear = false,bool update = true);
 signals:
-    void updateShow(const QString & m,bool clear = false,bool update = true);
+    void updateShow(const QString & m,bool ScreenClear = false,bool update = true);
 };
 
 struct Stage // 关卡类
@@ -95,16 +99,16 @@ public:
     static QString processError(Error _error,int line,QString * inputString = NULL,QString * answerString = NULL); // 处理error
     void caseAC(); // 一个样例AC
     void allCaseAC(); // 所有样例AC，没写
-    void updateOutput(const QString & m,bool clear = false,bool update = true);
+    void updateOutput(const QString & m,bool ScreenClear = false,bool update = true);
     void speedChange(bool adjust);
     void pause();
     void resume();
     void stop();
     void setup();
 signals:
-    void updateShow(const QString & m,bool clear = false,bool update = true);
-    void CalEnd(int returnCode);
-    void updateProgress(int clear,bool error);
+    void updateShow(const QString & m,bool ScreenClear = false,bool update = true);
+    void endRun(int returnCode);
+    void updateProgress(int ScreenClear,bool error);
 };
 
 
@@ -112,21 +116,23 @@ class Command:public QObject // 单句指令类
 {
     Q_OBJECT
 private:
-    CommandType c; // 指令种类
+    QString startKeyword;
+    QString endKeyword;
     bool isUsed; // 指令是否被使用过（和once关联）
     QString findString; // 左侧字符串
     QString putString; // 右侧字符串
     QString stringCode; // 原始的string形式的code
 public:
     Command();
-    void setCommandType(CommandType _c); // 4个set
-    void setStringCode(QString _s);
-    void setFindString(QString _s);
-    void setPutString(QString _s);
+    void setStringCode(QString _s){stringCode = _s;};
+    void setFindString(QString _s){findString = _s;};
+    void setPutString(QString _s){putString = _s;};
+    void setStartKeyword(QString _s){startKeyword = _s;}
+    void setEndKeyword(QString _s){endKeyword = _s;}
     int work(bool isAnswerCode,QString * _case,bool update = true); // 进行一行运算
-    void updateOutput(const QString & m,bool clear = false,bool update = true);
+    void updateOutput(const QString & m,bool ScreenClear = false,bool update = true);
 signals:
-    void updateShow(const QString & m,bool clear = false,bool update = true);
+    void updateShow(const QString & m,bool ScreenClear = false,bool update = true);
 };
 
 #endif // SYSTEM_H

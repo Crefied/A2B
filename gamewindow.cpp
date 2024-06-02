@@ -26,6 +26,8 @@ void GameWindow::on_run_clicked()
 
     if(isRunning)
     {
+        system->resume();
+        system->isStop = true;
         threadEnd();
     }
     system = new System();
@@ -33,7 +35,7 @@ void GameWindow::on_run_clicked()
     system->moveToThread(thread);
     connect(this, &GameWindow::startThread, system, &System::run);             // 计算关联
     connect(system, &System::updateShow, this, &GameWindow::updateOutputInfo); // 文本输出关联
-    connect(system, &System::CalEnd, this, &GameWindow::threadEnd, Qt::DirectConnection);
+    connect(system, &System::endRun, this, &GameWindow::threadEnd, Qt::DirectConnection);
     connect(thread, &QThread::finished, thread, &QThread::deleteLater, Qt::DirectConnection);
     connect(thread, &QThread::finished, system, &QObject::deleteLater, Qt::DirectConnection);
     connect(system,&System::updateProgress,this,&GameWindow::progressBar_update);
@@ -56,9 +58,9 @@ void GameWindow::setStageInfo()
     ui->Puzzle->appendPlainText(stage->caseDescription);
 }
 
-void GameWindow::updateOutputInfo(const QString &info, bool clear)
+void GameWindow::updateOutputInfo(const QString &info, bool ScreenClear)
 {
-    if (clear)
+    if (ScreenClear)
     {
         ui->Output->clear();
     }
@@ -91,13 +93,13 @@ void GameWindow::on_start_clicked()
 void GameWindow::on_slow_clicked()
 {
     if (isRunning)
-        system->speed = std::min(0, system->speed - 1);
+        system->speed = std::max(MINSPEED, system->speed - 1);
 }
 
 void GameWindow::on_quick_clicked()
 {
     if (isRunning)
-        system->speed = std::max(2, system->speed + 1);
+        system->speed = std::min(MAXSPEED, system->speed + 1);
 }
 
 void GameWindow::on_stop_clicked()

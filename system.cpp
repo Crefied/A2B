@@ -5,137 +5,39 @@ Code::Code()
     command = NULL;
     commandLen = 0;
 }
-void Code::updateOutput(const QString & m,bool clear,bool update)
+void Code::updateOutput(const QString & m,bool ScreenClear,bool update)
 {
     if(update)
-        emit updateShow(m,clear);
+        emit updateShow(m,ScreenClear);
 }
-void Code::process(QTextDocument * _doc)
+void Code::processDocIntoCode(QTextDocument * _doc)
 {
     int blocks = _doc->blockCount();
-    commandLen = blocks - 1;
     command = new Command [blocks];
-    updateOutput("This time :" + QString::number(blocks));
-    //System::logWidget->append("This time :" + QString::number(blocks));
+    int commandLine = 0;
     for(int i = 0;i < blocks;++i)
     {
         QTextBlock t = _doc->findBlockByNumber(i); // 每一行的文本
         QString s = t.text(); // 转化文本块为文字
-        command[i].setStringCode(s);
-        CommandType c = {};
+        if(s.trimmed() == "") // 空行，跳过
+        {
+            continue;
+        }
+        command[commandLine].setStringCode(s);
+        connect(&command[i],&Command::updateShow,this,&Code::updateOutput);
         if(s.indexOf("=") != -1) // 检查有没有=
         {
             QStringList sList =  s.split("=");
             if(sList.size() == 2) // 检查是否只有一个=
             {
-                // 检查是否是指令
-                bool firstKeyword = false;
-                if(sList[0].indexOf("(once)") != -1)
-                {
-                    if(!firstKeyword)
-                    {
-                        firstKeyword = true;
-                        c.isOnce = true;
-                        int st = sList[0].indexOf("(once)");
-                        sList[0].remove(st,6); // 去除关键字
-                    }
-                    else
-                    {
-                        // 处理多指令异常
-                        QString c = System::processError(CE_KS,i + 1);
-                        updateOutput(c);
-                        return;
-                    }
-                }
-                else if(sList[0].indexOf("(start)") != -1)
-                {
-                    if(!firstKeyword)
-                    {
-                        firstKeyword = true;
-                        c.isStartFind = true;
-                        int st = sList[0].indexOf("(start)");
-                        sList[0].remove(st,7); // 去除关键字
-                    }
-                    else
-                    {
-                        // 处理多指令异常
-                        QString c = System::processError(CE_KS,i + 1);
-                        updateOutput(c);
-                        return;
-                    }
-                }
-                else if(sList[1].indexOf("(start)") != -1)
-                {
-                    if(!firstKeyword)
-                    {
-                        firstKeyword = true;
-                        c.isStartPut = true;
-                        int st = sList[1].indexOf("(start)");
-                        sList[1].remove(st,7); // 去除关键字
-                    }
-                    else
-                    {
-                        // 处理多指令异常
-                        QString c = System::processError(CE_KS,i + 1);
-                        updateOutput(c);
-                        return;
-                    }
-                }
-                else if(sList[0].indexOf("(end)") != -1)
-                {
-                    if(!firstKeyword)
-                    {
-                        firstKeyword = true;
-                        c.isEndFind = true;
-                        int st = sList[0].indexOf("(end)");
-                        sList[0].remove(st,5); // 去除关键字
-                    }
-                    else
-                    {
-                        // 处理多指令异常
-                        QString c = System::processError(CE_KS,i + 1);
-                        updateOutput(c);
-                        return;
-                    }
-                }
-                else if(sList[1].indexOf("(end)") != -1)
-                {
-                    if(!firstKeyword)
-                    {
-                        firstKeyword = true;
-                        c.isEndPut = true;
-                        int st = sList[1].indexOf("(end)");
-                        sList[1].remove(st,5); // 去除关键字
-                    }
-                    else
-                    {
-                        // 处理多指令异常
-                        QString c = System::processError(CE_KS,i + 1);
-                        updateOutput(c);
-                        return;
-                    }
-                }
-                else if(sList[1].indexOf("(return)") != -1)
-                {
-                    if(!firstKeyword)
-                    {
-                        firstKeyword = true;
-                        c.isReturn = true;
-                        int st = sList[1].indexOf("(return)");
-                        sList[1].remove(st,8); // 去除关键字
-                    }
-                    else
-                    {
-                        // 处理多指令异常
-                        QString c = System::processError(CE_KS,i + 1);
-                        updateOutput(c);
-                        return;
-                    }
-                }
-                command[i].setCommandType(c);
-                command[i].setFindString( sList[0].trimmed()); // 移除首尾空白
-                command[i].setPutString(sList[1].trimmed());
-                connect(&command[i],&Command::updateShow,this,&Code::updateOutput); // 传递信号
+                bool isFirstStartKeyword = false;
+                bool isFirstEndKeyword = false;
+                processKeyword(sList[0],"(once)",command[commandLine],i + 1,true,isFirstStartKeyword);
+                processKeyword(sList[0],"(start)",command[commandLine],i + 1,true,isFirstStartKeyword);
+                processKeyword(sList[0],"(end)",command[commandLine],i + 1,true,isFirstStartKeyword);
+                processKeyword(sList[1],"(start)",command[commandLine],i + 1,true,isFirstEndKeyword);
+                processKeyword(sList[1],"(end)",command[commandLine],i + 1,true,isFirstEndKeyword);
+                processKeyword(sList[1],"(return)",command[commandLine],i + 1,true,isFirstEndKeyword);
             }
             else
             {
@@ -144,26 +46,43 @@ void Code::process(QTextDocument * _doc)
                 updateOutput(c);;
                 return;
             }
+            command[commandLine].setFindString(sList[0].trimmed());
+            command[commandLine].setPutString(sList[1].trimmed());
+            commandLine++;
         }
         else
         {
-            if(s.trimmed() == "") // 空行
-            {
-                return;
-            }
-            else
-            {
-                // 没有 =
-                QString c = System::processError(CE_EN,i + 1);
-                updateOutput(c);
-                return;
-            }
-
+            // 没有 =
+            QString c = System::processError(CE_EN,i + 1);
+            updateOutput(c);
+            return;
         }
-
     }
+    commandLen = commandLine;
 }
-QString Code::execute(QString testcase,bool isAnswerCode,bool _update)
+int Code::processKeyword(QString & source,const QString & keyword,Command & command,int line,bool isStart,bool isFirstKeyword)
+{
+    int keywordIndex = source.indexOf(keyword);
+    if(keywordIndex != -1)
+    {
+        if(isFirstKeyword)
+        {
+            System::processError(CE_KS,line);
+        }
+        if(isStart)
+        {
+            command.setStartKeyword(keyword);
+            source.remove(keywordIndex,keyword.length());
+        }
+        else if(!isStart)
+        {
+            command.setEndKeyword(keyword);
+            source.remove(keywordIndex,keyword.length());
+        }
+    }
+    return keywordIndex;
+}
+QString Code::executeCode(QString testcase,bool isAnswerCode,bool _update)
 {
     bool isEnd = false;
     int looptime = 0;
@@ -178,14 +97,14 @@ QString Code::execute(QString testcase,bool isAnswerCode,bool _update)
             updateOutput(c);
             break;
         }
-        for(int i = 0;i <= commandLen + 1;++i)
+        for(int i = 0;i <= commandLen;++i)
         {
-            if(i == commandLen + 1) // 走到头了
+            if(i == commandLen) // 走到头了
             {
                 isEnd = true;
                 break;
             }
-            int result = (command + i)->work(isAnswerCode,&testcase); // 执行代码
+            int result = (command + i)->work(isAnswerCode,&testcase,_update); // 执行代码
             if(result == 1) // 没找到
             {
                 continue;
@@ -210,17 +129,18 @@ QString Code::execute(QString testcase,bool isAnswerCode,bool _update)
 /*
 ------------------------------------------------------------------------------------
 */
+/*
 void System::speedChange(bool adjust)
 {
     if(adjust)
     {
-        speed = std::max(2,speed + 1);
+        speed = std::min(MAXSPEED,speed + 1);
     }
     else
     {
-        speed = std::min(0,speed - 1);
+        speed = std::max(MINSPEED,speed - 1);
     }
-}
+}*/
 void System::setup()
 {
     error = false;
@@ -247,7 +167,8 @@ void System::stop()
 }
 void System::judge(Stage *_stage, Code * _input ,Code * _answer,bool update)
 {
-    for(int i = 0;i < 3287;++i)
+    bool sentExecution = true;
+    for(int i = 0;i <= CASENUM;++i)
     {
         if(isPause)
         {
@@ -259,15 +180,20 @@ void System::judge(Stage *_stage, Code * _input ,Code * _answer,bool update)
         {
             break;
         }
+        if(speed == MAXSPEED)
+        {
+            sentExecution = false;
+        }
+        else
+        {
+            sentExecution = true;
+        }
+        QString testcase = generateCase(_stage);
         updateOutput("",true); // 清除
         updateOutput("Test Case: " + QString::number(i));
-        //logWidget->clear();
-        //logWidget->append("Test Case: " + QString::number(i));
-        QString testcase = generateCase(_stage);
         updateOutput("Input: " + testcase + "\n");
-        //logWidget->append("Input: " + testcase + "\n"); // 显示初始case
-        QString inputString = _input->execute(testcase,false); // 执行输入代码
-        QString answerString = _answer->execute(testcase,true); // 计算正确值
+        QString inputString = _input->executeCode(testcase,false,sentExecution); // 执行输入代码
+        QString answerString = _answer->executeCode(testcase,true,sentExecution); // 计算正确值
         if(inputString != answerString)
         {
             QString c = processError(WA,0,&inputString,&answerString); // 有case 错误
@@ -276,21 +202,11 @@ void System::judge(Stage *_stage, Code * _input ,Code * _answer,bool update)
         }
         else
         {
-            updateOutput("Your answer: " +answerString);
+            updateOutput("Your answer: " + inputString);
+            updateOutput("Right answer: " + answerString + "\n");
             caseAC();
         }
-        if(speed == 0) // 设置速度
-        {
-            QThread::msleep(1000);
-        }
-        if(speed == 1)
-        {
-            QThread::msleep(600);
-        }
-        if(speed == 2)
-        {
-            QThread::msleep(400);
-        }
+        QThread::msleep(700 - speed * 300);
     }
     if(isStop)
     {
@@ -328,27 +244,29 @@ void System::run(Stage * _stage,QTextDocument * _input,bool _debug) // incomplet
     Code answer = Code();
     connect(&test,&Code::updateShow,this,&System::updateOutput);
     connect(&answer,&Code::updateShow,this,&System::updateOutput);
-    test.process(_input);
+    test.processDocIntoCode(_input);
     if(error)
     {
         return;
     }
-    answer.process(_stage->answer);
+    answer.processDocIntoCode(_stage->answer);
     if(error)
     {
         return;
     }
     judge(_stage,&test,&answer,update);
-    emit CalEnd(0);
+    if(isStop)
+    {
+        emit endRun(0);
+    }
 }
 void System::caseAC()
 {
-    updateOutput("Accepted");
-    //logWidget->append("Accepted");
+    updateOutput("Accepted \n");
 }
 void System::allCaseAC()
 {
-    // incomplete
+    updateOutput("Stage complete");
 }
 bool System::error = false;
 
@@ -377,88 +295,58 @@ QString System::processError(Error _error,int line,QString * inputString,QString
     return report;
 }
 
-void System::updateOutput(const QString & m,bool clear,bool update)
+void System::updateOutput(const QString & m,bool ScreenClear,bool update)
 {
     if(update)
-        emit System::updateShow(m,clear);
+        emit System::updateShow(m,ScreenClear);
 }
 /*
 ------------------------------------------------------------------------------------
 */
 Command::Command()
 {
-    c = {};
     isUsed = false;
     findString = QString();
     putString = QString();
+    startKeyword = QString();
+    endKeyword = QString();
 }
-void Command::setFindString(QString _s)
-{
-    findString = _s;
-}
-void Command::setPutString(QString _s)
-{
-    putString = _s;
-}
-void Command::setStringCode(QString _s)
-{
-    stringCode = _s;
-}
-void Command::setCommandType(CommandType _c)
-{
-    c.isOnce = _c.isOnce;
-    c.isStartFind = _c.isStartFind;
-    c.isEndFind = _c.isEndFind;
-    c.isStartPut = _c.isStartPut;
-    c.isEndPut = _c.isEndPut;
-    c.isReturn = _c.isReturn;
-    isUsed = false;
-}
-void Command::updateOutput(const QString & m,bool clear,bool update)
+void Command::updateOutput(const QString & m,bool ScreenClear,bool update)
 {
     if(update)
-        emit updateShow(m,clear);
+        emit updateShow(m,ScreenClear);
 }
 int Command::work(bool isAnswerCode,QString * _case,bool _update)
 {
     if(!isUsed) // 如果是可以被使用的
     {
-        if(c.isReturn)
+        if(endKeyword == "(return)")
         {
             _case->clear();
             _case->append(putString);
             return 2;
         }
         int pos = -1;
-        if(c.isStartFind)
+        int searchPlace = 0;
+        if(startKeyword == "(start)")
         {
-            if(_case->indexOf(findString) == 0)
-            {
-                if(!isAnswerCode)
-                    updateOutput("    " + stringCode,false,_update);
-                pos = _case->indexOf(findString);
-                _case->remove(pos,findString.length());
-            }
+            searchPlace = 0;
         }
-        else if(c.isEndFind)
+        else if(startKeyword == "(end)")
         {
-            if(_case->lastIndexOf(findString) == _case->length() - 1)
-            {
-                if(!isAnswerCode)
-                    updateOutput("    " + stringCode,false,_update);
-                pos = _case->indexOf(findString);
-                _case->remove(pos,findString.length());
-            }
+            searchPlace = _case->length() - 1;
         }
         else
         {
-            if(_case->indexOf(findString) != -1)
-            {
-                if(!isAnswerCode)
-                    updateOutput("    " + stringCode,false,_update);
-                pos = _case->indexOf(findString);
-                _case->remove(pos,findString.length());
-            }
+            searchPlace = -1;
+        }
+        if((_case->indexOf(findString) == searchPlace && searchPlace != -1) ||
+            (_case->indexOf(findString) != -1 && searchPlace == -1) )
+        {
+            if(!isAnswerCode)
+                updateOutput("    " + stringCode,false,_update);
+            pos = _case->indexOf(findString);
+            _case->remove(pos,findString.length());
         }
         if(pos == -1)
         {
@@ -467,11 +355,11 @@ int Command::work(bool isAnswerCode,QString * _case,bool _update)
         }
         else
         {
-            if(c.isStartPut)
+            if(endKeyword == "(start)")
             {
                 _case->prepend(putString);
             }
-            else if(c.isEndPut)
+            else if(startKeyword == "(end)")
             {
                 _case->append(putString);
             }
@@ -486,7 +374,7 @@ int Command::work(bool isAnswerCode,QString * _case,bool _update)
         // 进行下一个指令
         return 1;
     }
-    if(c.isOnce)
+    if(startKeyword == "(once)")
     {
         isUsed = true;
     }
