@@ -226,7 +226,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="Chapter1">
           <property name="enabled">
@@ -241,53 +241,59 @@
              <x>100</x>
              <y>100</y>
              <width>160</width>
-             <height>281</height>
+             <height>501</height>
             </rect>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <widget class="QPushButton" name="Stage1_1">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="text">
-               <string>Stage1</string>
-              </property>
-              <property name="flat">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="stage1_2">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="text">
-               <string>Stage2</string>
-              </property>
-              <property name="flat">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <layout class="QVBoxLayout" name="verticalLayout"/>
           </widget>
          </widget>
          <widget class="QWidget" name="Chapter2">
           <attribute name="title">
            <string>Chapter2</string>
           </attribute>
+          <widget class="QWidget" name="verticalLayoutWidget_7">
+           <property name="geometry">
+            <rect>
+             <x>70</x>
+             <y>70</y>
+             <width>231</width>
+             <height>561</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_5"/>
+          </widget>
          </widget>
          <widget class="QWidget" name="Chapter3">
           <attribute name="title">
            <string>Chapter3</string>
           </attribute>
+          <widget class="QWidget" name="verticalLayoutWidget_8">
+           <property name="geometry">
+            <rect>
+             <x>70</x>
+             <y>50</y>
+             <width>231</width>
+             <height>561</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_6"/>
+          </widget>
          </widget>
          <widget class="QWidget" name="Chapter4">
           <attribute name="title">
            <string>Chapter4</string>
           </attribute>
+          <widget class="QWidget" name="verticalLayoutWidget_9">
+           <property name="geometry">
+            <rect>
+             <x>70</x>
+             <y>50</y>
+             <width>231</width>
+             <height>551</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_7"/>
+          </widget>
          </widget>
         </widget>
        </widget>
@@ -398,7 +404,7 @@
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>17</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

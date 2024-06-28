@@ -20,6 +20,7 @@ public:
     Ui::GameWindow *ui;
     Stage* stage;
     bool isRunning;
+    bool isStory = false;
     void setStageInfo(); // 已经更新stage信息才调用
     void updateOutputInfo(const QString & info,bool ScreenClear); // info 是输入信息，clear 是清屏
     void threadEnd();

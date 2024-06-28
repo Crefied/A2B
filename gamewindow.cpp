@@ -39,7 +39,8 @@ void GameWindow::on_run_clicked()
     connect(thread, &QThread::finished, thread, &QThread::deleteLater, Qt::DirectConnection);
     connect(thread, &QThread::finished, system, &QObject::deleteLater, Qt::DirectConnection);
     connect(system,&System::updateProgress,this,&GameWindow::progressBar_update);
-    stage->answer = ui->view->document(); // 设置答案
+    if (!isStory)
+        stage->answer = ui->view->document(); // 设置答案
     thread->start();                      // 线程开始
     // connect(this,&GameWindow::resume,system,&System::resume, Qt::QueuedConnection);
     // connect(this,&GameWindow::stop,system,&System::stop, Qt::QueuedConnection);
