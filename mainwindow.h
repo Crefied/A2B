@@ -3,6 +3,7 @@
 
 
 #include <QMainWindow>
+#include <QPushButton>
 #include "gamewindow.h"
 #include"gamewindow_designed.h"
 #include<QStackedLayout>
@@ -25,17 +26,21 @@ public:
     QStackedWidget* stackedWidget;
     QString styleSheet;
 
-    Stage* stages[10][10] = { nullptr };
-    bool stageAble[10][10] = { false };
-
+    Stage* stages[10][10] = { };
+    QPushButton * chapterButtons[5][8];
     //MainWindow(QWidget *parent = nullptr);
-    MainWindow(GameWindow* _gamewindow, QPointer<gamewindow_designed> _designedWindow = NULL, QWidget* parent = nullptr);
+    MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_designed> _designedWindow = NULL, QWidget* parent = nullptr);
     ~MainWindow();
-    
-
+    void loadProgress();
+    void updateUnlockStage();
+    void unlockAllStages();
+    void lockAllStages();
 private slots:
     void on_pushButton_clicked();
     void selfModeSlot();
+    void on_backButton_clicked();
+signals:
+    void closeEvent(QCloseEvent * event);
 private:
     Ui::MainWindow* ui;
     QPointer<GameWindow> gamewindow;

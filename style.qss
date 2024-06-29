@@ -11,6 +11,11 @@ QPushButton{
 	color:white;
 	font: 700 20pt "Microsoft YaHei UI";
 }
+QTextBrowser{
+    background-color:rgb(42, 42, 42);
+    color: rgb(0, 255, 0);
+    font: 700 16pt "SimSun";
+}
 QPushButton:hover{
 	
 }

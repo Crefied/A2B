@@ -5,6 +5,8 @@ GameWindow::GameWindow(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameWindow)
 {
     ui->setupUi(this);
+    ui->Puzzle->setReadOnly(true);
+    ui->view->setReadOnly(true);
     system = NULL;
     stage = new Stage();
     thread = NULL;
@@ -38,6 +40,7 @@ void GameWindow::on_run_clicked()
     connect(system, &System::endRun, this, &GameWindow::threadEnd, Qt::DirectConnection);
     connect(thread, &QThread::finished, thread, &QThread::deleteLater, Qt::DirectConnection);
     connect(thread, &QThread::finished, system, &QObject::deleteLater, Qt::DirectConnection);
+    connect(system,&System::stageClear,this,&GameWindow::unlockStage);
     connect(system,&System::updateProgress,this,&GameWindow::progressBar_update);
     if (!isStory)
         stage->answer = ui->view->document(); // 设置答案
@@ -58,7 +61,28 @@ void GameWindow::setStageInfo()
     ui->Puzzle->appendPlainText(stage->scriptDescription);
     ui->Puzzle->appendPlainText(stage->caseDescription);
 }
-
+void GameWindow::unlockStage()
+{
+    if(!stage->isAccomplished)
+    {
+        progress++;
+        stage->isAccomplished = true;
+    }
+}
+void GameWindow::closeEvent( QCloseEvent * event )
+{
+    QFileInfo fileInfo(__FILE__);
+    QDir sourceDir = fileInfo.dir();
+    QFile file(sourceDir.filePath("save.txt"));
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "Failed to open file" << file.errorString();
+        return;
+    }
+    QTextStream out(&file); out.setAutoDetectUnicode(true);
+    out << progress;
+    threadEnd();
+}
 void GameWindow::updateOutputInfo(const QString &info, bool ScreenClear)
 {
     if (ScreenClear)
@@ -69,10 +93,14 @@ void GameWindow::updateOutputInfo(const QString &info, bool ScreenClear)
 }
 void GameWindow::threadEnd()
 {
-    thread->quit();
-    thread->wait();
-    progressBar_init();
-    isRunning = false;
+    if(isRunning)
+    {
+        thread->quit();
+        thread->wait();
+        progressBar_init();
+        isRunning = false;
+    }
+
 }
 
 void GameWindow::on_pause_clicked()

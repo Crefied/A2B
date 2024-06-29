@@ -35,9 +35,9 @@ void Code::processDocIntoCode(QTextDocument * _doc)
                 processKeyword(sList[0],"(once)",command[commandLine],i + 1,true,isFirstStartKeyword);
                 processKeyword(sList[0],"(start)",command[commandLine],i + 1,true,isFirstStartKeyword);
                 processKeyword(sList[0],"(end)",command[commandLine],i + 1,true,isFirstStartKeyword);
-                processKeyword(sList[1],"(start)",command[commandLine],i + 1,true,isFirstEndKeyword);
-                processKeyword(sList[1],"(end)",command[commandLine],i + 1,true,isFirstEndKeyword);
-                processKeyword(sList[1],"(return)",command[commandLine],i + 1,true,isFirstEndKeyword);
+                processKeyword(sList[1],"(start)",command[commandLine],i + 1,false,isFirstEndKeyword);
+                processKeyword(sList[1],"(end)",command[commandLine],i + 1,false,isFirstEndKeyword);
+                processKeyword(sList[1],"(return)",command[commandLine],i + 1,false,isFirstEndKeyword);
             }
             else
             {
@@ -267,6 +267,7 @@ void System::caseAC()
 void System::allCaseAC()
 {
     updateOutput("Stage complete");
+    stageClear();
 }
 bool System::error = false;
 
@@ -318,6 +319,7 @@ void Command::updateOutput(const QString & m,bool ScreenClear,bool update)
 }
 int Command::work(bool isAnswerCode,QString * _case,bool _update)
 {
+
     if(!isUsed) // 如果是可以被使用的
     {
         if(endKeyword == "(return)")
@@ -389,8 +391,37 @@ Stage::Stage(QString _name, QString _scriptDescription, QString _caseDescription
     answer = new QTextDocument();
     answer->setPlainText(_answer);
     answerString = _answer;
+    plot = "";
 }
+void setPlot(Stage * stages[10][10],int chapters,const int levels[10])
+{
+    QFileInfo fileInfo(__FILE__);
+    QDir sourceDir = fileInfo.dir();
+    QFile file(sourceDir.filePath("plot.txt"));
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Failed to open file" << file.errorString();
+        return;
+    }
+    QTextStream in(&file); in.setAutoDetectUnicode(true);
+    for(int i = 1;i <= chapters;++i)
+    {
+        for(int j = 1;j <= levels[i];++j)
+        {
+            QString plot = "";
+            QString curLine = "";
+            while(curLine != "end\r\n")
+            {
+                plot += curLine;
+                curLine = file.readLine();
+            }
+            if(j >= 2)
+                qDebug() << stages[i][j-1]->plot << "\n";
+            stages[i][j]->plot = plot;
+        }
 
+    }
+}
 void Stage::saveStage()
 {
     QFileInfo fileInfo(__FILE__);

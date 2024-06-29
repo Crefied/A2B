@@ -21,9 +21,12 @@ public:
     Stage* stage;
     bool isRunning;
     bool isStory = false;
+    int progress = 1;
     void setStageInfo(); // 已经更新stage信息才调用
     void updateOutputInfo(const QString & info,bool ScreenClear); // info 是输入信息，clear 是清屏
+
     void threadEnd();
+    void closeEvent(QCloseEvent * event);
 private slots:
     void on_run_clicked();
 
@@ -40,6 +43,8 @@ private slots:
     void progressBar_update(int amount,bool error);
 
     void progressBar_init();
+
+    void unlockStage();
 signals:
     void startThread(Stage * _stage,QTextDocument * _input,bool _debug);
     void speedChange(bool adjust);

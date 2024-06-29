@@ -24,7 +24,7 @@ class System;
 const int MAXTIME = 800;
 const int MAXSPEED = 2;
 const int MINSPEED = 0;
-const int CASENUM = 80;
+const int CASENUM = 50;
 enum Error {
     WA = 1,
     TLE,
@@ -66,14 +66,16 @@ struct Stage // 关卡类
     QTextDocument* answer; // 原始代码
     int caseMinLen = 1; // 最小例子长度
     int caseMaxLen = 7; // 最大例子长度
-
+    bool isAccomplished = false;
     QString name; // 关卡名
     QString scriptDescription;// 关卡描述
     QString caseDescription; // 例子描述
     QString answerString;
+    QString plot;
     Stage() {};
-    Stage(QString _name, QString _scriptDescription, QString _caseDescription, QString answer);
+    Stage(QString _name, QString _scriptDescription, QString _caseDescription, QString _answer);
     void saveStage();
+    friend void setPlot(Stage * stages[10][10],int chapters,const int levels[10]);
     void loadStage(QString path); // path:QString("Stage/") + n + ".txt" !!! n需要name去掉 QChar('\n')
 };
 
@@ -109,6 +111,7 @@ signals:
     void updateShow(const QString & m,bool ScreenClear = false,bool update = true);
     void endRun(int returnCode);
     void updateProgress(int ScreenClear,bool error);
+    void stageClear();
 };
 
 
