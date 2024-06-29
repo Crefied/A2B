@@ -67,6 +67,7 @@ struct Stage // 关卡类
     int caseMinLen = 1; // 最小例子长度
     int caseMaxLen = 7; // 最大例子长度
     bool isAccomplished = false;
+    bool onlyStory = false;
     QString name; // 关卡名
     QString scriptDescription;// 关卡描述
     QString caseDescription; // 例子描述
@@ -74,6 +75,7 @@ struct Stage // 关卡类
     QString plot;
     Stage() {};
     Stage(QString _name, QString _scriptDescription, QString _caseDescription, QString _answer);
+    Stage(QString name_, bool onlyStory_);
     void saveStage();
     friend void setPlot(Stage * stages[10][10],int chapters,const int levels[10]);
     void loadStage(QString path); // path:QString("Stage/") + n + ".txt" !!! n需要name去掉 QChar('\n')

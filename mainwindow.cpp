@@ -7,7 +7,7 @@
 #include <QDir>
 #pragma execution_character_set("utf-8")
 
-const int LEVELS[10] = {0,3,5,6,3}; // 每章关卡数
+const int LEVELS[10] = {0,4,6,6,6}; // 每章关卡数
 const int CHAPTERS = 4; // 章节数
 
 MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_designed> _designedWindow, QWidget* parent)
@@ -27,12 +27,13 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
     stages[1][1] = new Stage("A=B\n", "将字符串中所有字母a换成字母b\n", "Input example:aabcbbc\nOutput example:bbbcbbc\n", "a=b");
 	stages[1][2] = new Stage("排序\n", "给定一个由a,b,c组成的字符串，将其按照字母顺序重新排序。\n", "Input example:cbacabb\nOutput example:aabbbcc\n"," ba = ab \n ca = ac \n cb = bc");
     stages[1][3] = new Stage("去重\n", "将字符串中所有连续的相同字母换成单个字母。\n", "Input example:aaaccba\nOutput example:acba\n", "aa=a\nbb=b\ncc=c");
+    stages[1][4] = new Stage("明天\n", true);
     stages[2][2] = new Stage("余数\n", "输入由abc构成的字符串，输出字符串长度模3的余数。\n", "Input example:cabcaba\nOutput example:1\n", "a=c\nb=c\nccc= \ncc=(return)2\nc=(return)1\n=(return)0");
     stages[2][1] = new Stage("Hello World\n", "输出HelloWorld。\n", "Input example:aaaccba\nOutput example:Hello World\n", "=(return)Hello World");
-    stages[2][2] = new Stage("去重\n", "将字符串中所有连续的相同字母换成单个字母。\n", "Input example:aaaccba\nOutput example:acba\n", "aa=a\nbb=b\ncc=c");
-    stages[2][3] = new Stage("???","","","");
+    stages[2][3] = new Stage("神\n",true);
     stages[2][4] = new Stage("独一无二\n", "输入由abc构成的字符串。若仅有一个字符与其所有相邻字符均不同，输出true，否则输出false。控制代码在10行以内。\n", "Input example:aabcc\nOutput example:true\n", "b=xaxx\nc=xxax\nxxx=\nxx=x\naaa=aa\naa=\naxa=(return)false\na=(return)true\n=(return)false");
     stages[2][5] = new Stage("最少\n", "输入由abc构成的字符串。输出其中出现次数最少的字符。保证答案唯一。控制代码在10行以内。\n", "Input example:cbabbcc\nOutput example:a\n", "ba=ab\nca=ac\ncb=bc\nbc=d\nbd=db\nad=\nd=(return)a\nb=(return)c\nc=(return)b");
+    stages[2][6] = new Stage("Who am I\n", "输出“WhoAmI”\n", "no example", "=(return)WhoAmI");
     stages[3][1] = new Stage("Start&End\n", "给定一个由abc组成的字符串。将开头和结尾的所有a去除。\n", "Input example:aabcba\nOutput example:bcb\n", "(start)a=\n(end)a=");
     stages[3][2] = new Stage("A2B\n", "将开头和结尾的所有a换成b。代码不能超过四行。\n", "nothing\n", "(start)a=(end)x\nx=(start)b\n(end)a=(start)y\ny=(end)b");
     stages[3][3] = new Stage("回文串\n", "输入由abc构成的字符串。若此字符串为回文串，则输出true，否则输出false。\n", "nothing\n", "xaxa=\nxbxb=\nxcxc=\n(end)a=(start)xax\n(end)b=(start)xbx\n(end)c=(start)xcx\nxx=(return)false\n=(return)true");
@@ -41,7 +42,10 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
     stages[3][6] = new Stage("最多\n", "输入由abc构成的字符串。保留输入次数最多的一个字母，删除其他字母。保证出现最多的字母只有一个。\n", "Input example:abccbca\nOutput example:ccc\n", "ba=ab\nca=ac\ncb=bc\nbc=(start)x\nxa=(start)y\nac=(start)y\nab=(start)y\nx=y\nyc=cc\nya=aa\ny=b");
     stages[4][1] = new Stage("移除\n", "输入由abc构成的字符串，移除前三个a。若a不足三个，全部移除。\n", "Input example:aabcaca\nOutput example:bcca\n", "(once)a=\n(once)a=\n(once)a=");
     stages[4][2] = new Stage("移除2\n", "输入由abc构成的字符串，移除后三个a。若a不足三个，全部移除。\n", "Input example:aabcaca\nOutput example:abcc\n", "(once)=(end)xxx\ncx=xc\nbx=xb\nax=\nx=");
-    stages[4][3] = new Stage("删除\n", "输入一个由abc构成的字符串。输出空字符串。\n", "nothing\n", "=(return)");
+    stages[4][3] = new Stage("抉择\n", true);
+    stages[4][4] = new Stage("删除\n", "输入一个由abc构成的字符串。输出空字符串。\n", "nothing\n", "=(return)");
+    stages[4][5] = new Stage("华茂", true);
+    stages[4][6] = new Stage("复制\n", "输入由abc构成的字符串，满足长度大于等于3。复制开头的三个字母，并将其拷贝在结尾。\n", "Input example:abcbcbb\nOutput example:abcbcbbabc\n", "(once)=xxx\nya=(start)a\nyb=(start)b\nyc=(start)c\nxa=(end)yaa\nxb=(end)ybb\nxc=(end)ycc\n(once)=yyy");
 
     setPlot(stages,CHAPTERS,LEVELS); // 导入剧情
 
@@ -95,9 +99,17 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
                         this->ui->plotViewer->show();
                         this->ui->plotViewer->setText(stages[i][j]->plot);
                         // 设置关卡界面
+                        if (stages[i][j]->onlyStory)
+                        {
+                            gamewindow->progress++;
+                            this->updateUnlockStage();
+                            ui->enterButton->hide();
+                            return;
+                        }
+                        ui->enterButton->show();
                         disconnect(ui->enterButton,0,0,0);
                         connect(ui->enterButton, &QPushButton::clicked, this, [&, i,j]()
-                                {
+                                {                                                                
                                     gamewindow->stage = stages[i][j];
                                     gamewindow->ui->Puzzle->clear();
                                     gamewindow->ui->view->clear();
@@ -137,6 +149,16 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
     connect(ui->storyModeButton, &QPushButton::clicked, this, [&]()
 		{
             updateUnlockStage();
+            qDebug() << gamewindow->progress;
+            if (gamewindow->progress > 16)
+                ui->tabWidget->setCurrentIndex(3);
+            else if (gamewindow->progress > 10)
+                ui->tabWidget->setCurrentIndex(2);
+            else if (gamewindow->progress > 4)
+                ui->tabWidget->setCurrentIndex(1);
+            else
+                ui->tabWidget->setCurrentIndex(0);
+
 			ui->stackedWidget->setCurrentIndex(1);
             gamewindow->isStory = true;
 		});
@@ -158,6 +180,10 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
             this->hide();
         });
     connect(this,&MainWindow::closeEvent,gamewindow,&GameWindow::closeEvent);
+
+    connect(ui->unlockButton, &QPushButton::clicked, this, &MainWindow::unlockAllStages);
+    connect(ui->lockButton, &QPushButton::clicked, this, &MainWindow::lockAllStages);
+   
 }
 
 MainWindow::~MainWindow()
@@ -208,7 +234,7 @@ void MainWindow::loadProgress()
 }
 void MainWindow::unlockAllStages()
 {
-    gamewindow->progress = 17;
+    gamewindow->progress = 22;
 }
 void MainWindow::lockAllStages()
 {

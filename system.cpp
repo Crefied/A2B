@@ -461,3 +461,9 @@ void Stage::loadStage(QString path)
     answer->setPlainText(answerString);
     file.close();
 }
+
+Stage::Stage(QString name_, bool onlyStory_)
+{
+    name = name_;
+    onlyStory = onlyStory_;
+}

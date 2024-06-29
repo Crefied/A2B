@@ -69,7 +69,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="startMenu">
         <widget class="QWidget" name="verticalLayoutWidget">
@@ -226,7 +226,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="Chapter1">
           <property name="enabled">
@@ -273,7 +273,7 @@
              <x>70</x>
              <y>50</y>
              <width>231</width>
-             <height>561</height>
+             <height>621</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="Chapter3_Buttons"/>
@@ -289,7 +289,7 @@
              <x>70</x>
              <y>50</y>
              <width>231</width>
-             <height>551</height>
+             <height>611</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="Chapter4_Buttons"/>
@@ -338,7 +338,46 @@
          </property>
         </widget>
        </widget>
-       <widget class="QWidget" name="optionWidget"/>
+       <widget class="QWidget" name="optionWidget">
+        <widget class="QPushButton" name="unlockButton">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>80</y>
+           <width>341</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>一键解锁</string>
+         </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="lockButton">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>340</y>
+           <width>341</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>一键上锁</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </widget>
        <widget class="QWidget" name="modeWidget">
         <widget class="QWidget" name="verticalLayoutWidget_5">
          <property name="geometry">
@@ -445,7 +484,7 @@
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>17</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
