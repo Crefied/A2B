@@ -101,6 +101,7 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
                                     gamewindow->stage = stages[i][j];
                                     gamewindow->ui->Puzzle->clear();
                                     gamewindow->ui->view->clear();
+                                    gamewindow->ui->Output->clear();
                                     gamewindow->ui->upload->hide();
                                     gamewindow->setStageInfo();
                                     this->gamewindow->setGeometry(this->geometry());
