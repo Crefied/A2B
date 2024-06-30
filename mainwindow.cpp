@@ -185,7 +185,7 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
             gamewindow->ui->IDE->clear();
             gamewindow->ui->Output->clear();
             gamewindow->ui->view->setReadOnly(true);
-            gamewindow->ui->view->setPlainText(QString("Change stage information on the left top box\nGive your stage standard answer on the left down box\nThen click upload to save your stage"));
+            gamewindow->ui->view->setPlainText(QString("可编辑的内容：\n左上角的关卡标题、描述、测试案例\n右下角的标准答案\n点击UPLOAD保存关卡后可在自定义模式中选择"));
             gamewindow->setStageInfo();
             this->gamewindow->setGeometry(this->geometry());
             this->gamewindow->resize(this->size());

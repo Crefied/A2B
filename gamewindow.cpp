@@ -44,7 +44,7 @@ void GameWindow::on_run_clicked()
     connect(system,&System::updateProgress,this,&GameWindow::progressBar_update);
     if (isEdit)
     {
-        stage->answer = ui->view->document(); // 设置答案
+        stage->answer = ui->IDE->document(); // 设置答案
         //isEdit = false;
     }
     thread->start();                      // 线程开始
