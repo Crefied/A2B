@@ -362,7 +362,7 @@ int Command::work(bool isAnswerCode,QString * _case,bool _update)
             {
                 _case->prepend(putString);
             }
-            else if(startKeyword == "(end)")
+            else if(endKeyword == "(end)")
             {
                 _case->append(putString);
             }
