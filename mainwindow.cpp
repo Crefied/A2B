@@ -158,6 +158,8 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
     connect(ui->storyModeButton, &QPushButton::clicked, this, [&]()
 		{
             updateUnlockStage();
+            gamewindow->isEdit = false;
+            //isDesign = true;
             qDebug() << gamewindow->progress;
             if (gamewindow->progress > 16)
                 ui->tabWidget->setCurrentIndex(3);
@@ -169,13 +171,14 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
                 ui->tabWidget->setCurrentIndex(0);
 
 			ui->stackedWidget->setCurrentIndex(1);
-            gamewindow->isStory = true;
+            
 		});
     connect(ui->selfModeButton, &QPushButton::clicked, this, &MainWindow::selfModeSlot);
 		
     connect(ui->editorPushButton, &QPushButton::clicked, this, [&]()
         {
             isDesign = true;
+            gamewindow->isEdit = true;
             gamewindow->stage = stages[1][1];
             gamewindow->ui->Puzzle->clear();
 			gamewindow->ui->view->clear();
@@ -277,6 +280,8 @@ void MainWindow::updateUnlockStage()
 }
 void MainWindow::selfModeSlot()
 {
+    gamewindow->isEdit = false;
+    isDesign = true;
     QLayout* lay = ui->verticalLayout_4;
 	//删除lay的所有
 	while (QLayoutItem* item = lay->takeAt(0))
@@ -317,6 +322,7 @@ void MainWindow::selfModeSlot()
 			connect(button, &QPushButton::clicked, this, [&, name, scriptDescription, exampleCase, answer]()
 				{
 					gamewindow->stage = new Stage(name, scriptDescription, exampleCase, answer);
+                    qDebug() << gamewindow->stage->answerString;
 					//button->setText(name);
 					gamewindow->setStageInfo();
                     this->gamewindow->setGeometry(this->geometry());

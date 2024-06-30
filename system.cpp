@@ -250,6 +250,7 @@ void System::run(Stage * _stage,QTextDocument * _input,bool _debug) // incomplet
         return;
     }
     answer.processDocIntoCode(_stage->answer);
+    qDebug() << _stage->answerString <<_stage->name ;
     if(error)
     {
         return;

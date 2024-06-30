@@ -42,8 +42,11 @@ void GameWindow::on_run_clicked()
     connect(thread, &QThread::finished, system, &QObject::deleteLater, Qt::DirectConnection);
     connect(system,&System::stageClear,this,&GameWindow::unlockStage);
     connect(system,&System::updateProgress,this,&GameWindow::progressBar_update);
-    if (!isStory)
+    if (isEdit)
+    {
         stage->answer = ui->view->document(); // 设置答案
+        //isEdit = false;
+    }
     thread->start();                      // 线程开始
     // connect(this,&GameWindow::resume,system,&System::resume, Qt::QueuedConnection);
     // connect(this,&GameWindow::stop,system,&System::stop, Qt::QueuedConnection);
