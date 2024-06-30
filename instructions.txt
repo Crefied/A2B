@@ -1,0 +1,67 @@
+Programming is a skill best acquired by practice and example rather than from instructions. -- Alan Turing
+程序执行流程：
+从上往下执行语句，若有合法可执行语句则执行，否则跳转到下一行语句
+若无可执行语句则输出Output
+
+Grammer Instruction
+
+1.a = b 
+
+在Input中寻找第一个出现的左侧字符串，将其替换为右侧字符串
+
+E.g. 
+input: aabbcc
+Code: ab = bc
+Output: abcbcc 
+end
+
+2.x = (return)y
+
+在Input中寻找第一个出现的左侧字符串，若出现直接返回右侧字符串
+
+E.g.
+input: aabbcc
+Code: ab = (return)true
+Output: true
+end
+
+3.1 (start)/(end) x = y
+
+在Input的开头/结尾寻找左侧字符串，将其替换为右侧字符串
+
+E.g. 
+input: aabbcc
+Code: (start)ab = bc 
+Output: aabbcc （未执行操作）
+E.g.2
+input: aabbcc
+Code: (start)aa = bc 
+Output: bcbbcc 
+E.g.3
+input: aabbcc
+Code: (end)cc = bc 
+Output: aabbbc
+
+3.2 x = (start)/(end) y
+
+在Input中寻找第一个出现的左侧字符串，若出现在开头/结尾添加右侧字符串
+
+E.g. 
+input: aabbcc
+Code: ab = (start)bc 
+Output: bcabcc 
+E.g.2
+input: aabbcc
+Code: aa = (end)bc 
+Output: bbccbc 
+
+一行最多使用一个关键字
+E.g. 
+Code: (start)ab = (end)bc // compile error
+
+end
+4. (once)x = y
+
+该语句在一个case中最多只会执行一次
+end
+

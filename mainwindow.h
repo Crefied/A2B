@@ -25,7 +25,7 @@ public:
     QWidget* centralWidget;
     QStackedWidget* stackedWidget;
     QString styleSheet;
-    bool isDesign = false;
+
     Stage* stages[10][10] = { };
     QPushButton * chapterButtons[5][8];
     //MainWindow(QWidget *parent = nullptr);
@@ -35,6 +35,7 @@ public:
     void updateUnlockStage();
     void unlockAllStages();
     void lockAllStages();
+    void hideSelfStages();
 private slots:
     void on_pushButton_clicked();
     void selfModeSlot();

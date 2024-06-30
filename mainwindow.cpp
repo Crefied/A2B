@@ -9,7 +9,7 @@
 
 const int LEVELS[10] = {0,4,6,6,6}; // 每章关卡数
 const int CHAPTERS = 4; // 章节数
-
+const int INSTRUCTION_STAGES[10] = {0,1,5,11,17,23};
 MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_designed> _designedWindow, QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -48,6 +48,7 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
     stages[4][6] = new Stage("复制\n", "输入由abc构成的字符串，满足长度大于等于3。复制开头的三个字母，并将其拷贝在结尾。\n", "Input example:abcbcbb\nOutput example:abcbcbbabc\n", "(once)=xxx\nya=(start)a\nyb=(start)b\nyc=(start)c\nxa=(end)yaa\nxb=(end)ybb\nxc=(end)ycc\n(once)=yyy");
 
     setPlot(stages,CHAPTERS,LEVELS); // 导入剧情
+    setInstruction(stages,CHAPTERS,LEVELS,INSTRUCTION_STAGES); // 设置manuals
 
     QFile file(styleSheetPath); // 设置样式表
     if (file.open(QFile::ReadOnly))
@@ -75,6 +76,7 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
 
 
     loadProgress(); // 读入存档
+
     // 对每个关卡的按钮进行剧情和stage信息映射
     for(int i = 1;i <= CHAPTERS;++i)
     {
@@ -114,19 +116,21 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
                                     gamewindow->ui->Puzzle->clear();
                                     gamewindow->ui->view->clear();
                                     gamewindow->ui->Output->clear();
+                                    gamewindow->ui->IDE->clear();
                                     gamewindow->ui->upload->hide();
                                     gamewindow->setStageInfo();
                                     this->gamewindow->setGeometry(this->geometry());
                                     this->gamewindow->resize(this->size());
                                     this->gamewindow->show();
                                     this->hide();
+                                    disconnect(gamewindow->ui->backButton,0,0,0);
+                                    connect(gamewindow->ui->backButton,&QPushButton::clicked,this,&MainWindow::on_backButton_clicked);
                                 });
                     });
         }
     }
     //链接各选择按钮功能，setCurrentIndex是换界面用的
     //stackedWidget 0:startMenus,1:stageMenus,2:optionMenus,3:modeWidget 模式选择,4:editorWindow
-    connect(gamewindow->ui->backButton, &QPushButton::clicked, this, &MainWindow::on_backButton_clicked);
     connect(designedWindow->ui->backButton, &QPushButton::clicked, this, [&]()
         {
             ui->stackedWidget->setCurrentIndex(0);
@@ -134,17 +138,8 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
 
     connect(ui->startPushButton, &QPushButton::clicked, this, [&]()
         {
-            QLayout* lay = ui->verticalLayout_4;
-            //删除lay的所有
-            while (QLayoutItem* item = lay->takeAt(0))
-            {
-                if (QWidget* widget = item->widget())
-                {
-                    widget->deleteLater();
-                }
-                delete item;
-            }
             ui->stackedWidget->setCurrentIndex(3);
+            hideSelfStages();
         });
 
     connect(ui->backPushButton, &QPushButton::clicked, this, [&]()
@@ -158,8 +153,6 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
     connect(ui->storyModeButton, &QPushButton::clicked, this, [&]()
 		{
             updateUnlockStage();
-            gamewindow->isEdit = false;
-            //isDesign = true;
             qDebug() << gamewindow->progress;
             if (gamewindow->progress > 16)
                 ui->tabWidget->setCurrentIndex(3);
@@ -171,26 +164,34 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
                 ui->tabWidget->setCurrentIndex(0);
 
 			ui->stackedWidget->setCurrentIndex(1);
-            
+            gamewindow->isStory = true;
 		});
     connect(ui->selfModeButton, &QPushButton::clicked, this, &MainWindow::selfModeSlot);
 		
     connect(ui->editorPushButton, &QPushButton::clicked, this, [&]()
         {
-            isDesign = true;
-            gamewindow->isEdit = true;
             gamewindow->stage = stages[1][1];
             gamewindow->ui->Puzzle->clear();
 			gamewindow->ui->view->clear();
             gamewindow->ui->IDE->clear();
             gamewindow->ui->Output->clear();
-            gamewindow->ui->view->setReadOnly(true);
-            gamewindow->ui->view->setPlainText(QString("可编辑的内容：\n左上角的关卡标题、描述、测试案例\n右下角的标准答案\n点击UPLOAD保存关卡后可在自定义模式中选择"));
+            gamewindow->ui->view->setReadOnly(false);
+            gamewindow->ui->Puzzle->setReadOnly(false);
+            gamewindow->ui->upload->show();
+            gamewindow->ui->view->setPlainText(QString("Change stage information on the left top box\nGive your stage standard answer on the left down box\nThen click upload to save your stage"));
             gamewindow->setStageInfo();
             this->gamewindow->setGeometry(this->geometry());
             this->gamewindow->resize(this->size());
             this->gamewindow->show();
             this->hide();
+            disconnect(gamewindow->ui->backButton,0,0,0);
+            connect(gamewindow->ui->backButton,&QPushButton::clicked,this,[&](){
+                this->setGeometry(gamewindow->geometry());
+                this->resize(gamewindow->size());
+                gamewindow->hide();
+                this->show();
+                ui->stackedWidget->setCurrentIndex(0);
+            });
         });
     connect(this,&MainWindow::closeEvent,gamewindow,&GameWindow::closeEvent);
 
@@ -205,25 +206,29 @@ MainWindow::~MainWindow()
 }
 void MainWindow::on_backButton_clicked()
 {
-    
     this->setGeometry(gamewindow->geometry());
     this->resize(gamewindow->size());
     //这里进行一次关卡通过更新
-    qDebug() << "back:" << gamewindow->progress;
     updateUnlockStage();
+
     gamewindow->hide();
     this->show();
-    if (isDesign)
-    {
-        ui->stackedWidget->setCurrentIndex(0);
-        return;
-    }
     ui->stackedWidget->setCurrentIndex(1);
 }
 void MainWindow::on_pushButton_clicked()
 {
     this->hide();
     this->gamewindow->show();
+}
+void MainWindow::hideSelfStages()
+{
+    QLayout* lay = ui->verticalLayout_4; // 隐藏自定义选项
+    for(int i = 0;i< lay->count();++i)
+    {
+        QLayoutItem * item = lay->takeAt(i);
+        QWidget * widget = item->widget();
+        widget->hide();
+    }
 }
 void MainWindow::loadProgress()
 {
@@ -274,14 +279,11 @@ void MainWindow::updateUnlockStage()
             else
             {
                 chapterButtons[i][j]->hide();
-                //return;
             }
         }
 }
 void MainWindow::selfModeSlot()
 {
-    gamewindow->isEdit = false;
-    isDesign = true;
     QLayout* lay = ui->verticalLayout_4;
 	//删除lay的所有
 	while (QLayoutItem* item = lay->takeAt(0))
@@ -322,7 +324,6 @@ void MainWindow::selfModeSlot()
 			connect(button, &QPushButton::clicked, this, [&, name, scriptDescription, exampleCase, answer]()
 				{
 					gamewindow->stage = new Stage(name, scriptDescription, exampleCase, answer);
-                    qDebug() << gamewindow->stage->answerString;
 					//button->setText(name);
 					gamewindow->setStageInfo();
                     this->gamewindow->setGeometry(this->geometry());

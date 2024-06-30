@@ -73,11 +73,13 @@ struct Stage // 关卡类
     QString caseDescription; // 例子描述
     QString answerString;
     QString plot;
+    QString instruction; // 对应的指示
     Stage() {};
     Stage(QString _name, QString _scriptDescription, QString _caseDescription, QString _answer);
     Stage(QString name_, bool onlyStory_);
     void saveStage();
     friend void setPlot(Stage * stages[10][10],int chapters,const int levels[10]);
+    friend void setInstruction(Stage * stages[10][10],int chapters,const int levels[10],const int instructionStages[10]);
     void loadStage(QString path); // path:QString("Stage/") + n + ".txt" !!! n需要name去掉 QChar('\n')
 };
 

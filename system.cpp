@@ -250,7 +250,6 @@ void System::run(Stage * _stage,QTextDocument * _input,bool _debug) // incomplet
         return;
     }
     answer.processDocIntoCode(_stage->answer);
-    qDebug() << _stage->answerString <<_stage->name ;
     if(error)
     {
         return;
@@ -416,12 +415,46 @@ void setPlot(Stage * stages[10][10],int chapters,const int levels[10])
                 plot += curLine;
                 curLine = file.readLine();
             }
-            if(j >= 2)
-                qDebug() << stages[i][j-1]->plot << "\n";
             stages[i][j]->plot = plot;
         }
 
     }
+}
+void setInstruction(Stage * stages[10][10],int chapters,const int levels[10],const int instructionStages[10])
+{
+    QFileInfo fileInfo(__FILE__);
+    QDir sourceDir = fileInfo.dir();
+    QFile file(sourceDir.filePath("instructions.txt"));
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Failed to open file" << file.errorString();
+        return;
+    }
+    QTextStream in(&file); in.setAutoDetectUnicode(true);
+    QString instructions[5] = {};
+    for(int i = 1;i <= chapters;++i)
+    {
+        QString instruction = "";
+        QString curLine = "";
+        while(curLine != "end\r\n")
+        {
+            instruction += curLine;
+            curLine = file.readLine();
+        }
+        instructions[i] =  instructions[i - 1] + instruction;
+    }
+    int p = 1;
+    int t = 1;
+    for(int i = 1;i <= chapters;++i)
+        for(int j = 1;j <= levels[i];++j)
+        {
+            if (p >= instructionStages[t + 1])
+            {
+                t++;
+            }
+            stages[i][j]->instruction = instructions[t];
+            p++;
+        }
 }
 void Stage::saveStage()
 {
