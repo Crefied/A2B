@@ -195,6 +195,7 @@ void MainWindow::on_backButton_clicked()
     this->setGeometry(gamewindow->geometry());
     this->resize(gamewindow->size());
     //这里进行一次关卡通过更新
+    qDebug() << "back:" << gamewindow->progress;
     updateUnlockStage();
     gamewindow->hide();
     this->show();
@@ -254,6 +255,7 @@ void MainWindow::updateUnlockStage()
             else
             {
                 chapterButtons[i][j]->hide();
+                //return;
             }
         }
 }
