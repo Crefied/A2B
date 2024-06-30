@@ -25,7 +25,7 @@ public:
     QWidget* centralWidget;
     QStackedWidget* stackedWidget;
     QString styleSheet;
-
+    bool isDesign = false;
     Stage* stages[10][10] = { };
     QPushButton * chapterButtons[5][8];
     //MainWindow(QWidget *parent = nullptr);

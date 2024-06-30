@@ -134,7 +134,16 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
 
     connect(ui->startPushButton, &QPushButton::clicked, this, [&]()
         {
-
+            QLayout* lay = ui->verticalLayout_4;
+            //删除lay的所有
+            while (QLayoutItem* item = lay->takeAt(0))
+            {
+                if (QWidget* widget = item->widget())
+                {
+                    widget->deleteLater();
+                }
+                delete item;
+            }
             ui->stackedWidget->setCurrentIndex(3);
         });
 
@@ -166,6 +175,7 @@ MainWindow::MainWindow(QPointer<GameWindow> _gamewindow, QPointer<gamewindow_des
 		
     connect(ui->editorPushButton, &QPushButton::clicked, this, [&]()
         {
+            isDesign = true;
             gamewindow->stage = stages[1][1];
             gamewindow->ui->Puzzle->clear();
 			gamewindow->ui->view->clear();
@@ -192,6 +202,7 @@ MainWindow::~MainWindow()
 }
 void MainWindow::on_backButton_clicked()
 {
+    
     this->setGeometry(gamewindow->geometry());
     this->resize(gamewindow->size());
     //这里进行一次关卡通过更新
@@ -199,6 +210,11 @@ void MainWindow::on_backButton_clicked()
     updateUnlockStage();
     gamewindow->hide();
     this->show();
+    if (isDesign)
+    {
+        ui->stackedWidget->setCurrentIndex(0);
+        return;
+    }
     ui->stackedWidget->setCurrentIndex(1);
 }
 void MainWindow::on_pushButton_clicked()
