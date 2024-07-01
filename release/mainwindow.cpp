@@ -222,12 +222,15 @@ void MainWindow::on_pushButton_clicked()
 }
 void MainWindow::hideSelfStages()
 {
-    QLayout* lay = ui->verticalLayout_4; // 隐藏自定义选项
-    for(int i = 0;i< lay->count();++i)
+    QLayout* lay = ui->verticalLayout_4;
+    //删除lay的所有
+    while (QLayoutItem* item = lay->takeAt(0))
     {
-        QLayoutItem * item = lay->takeAt(i);
-        QWidget * widget = item->widget();
-        widget->hide();
+        if (QWidget* widget = item->widget())
+        {
+            widget->deleteLater();
+        }
+        delete item;
     }
 }
 void MainWindow::loadProgress()
